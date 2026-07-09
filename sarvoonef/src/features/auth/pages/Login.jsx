@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
+import api from '../../../shared/api/axios';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -20,19 +21,27 @@ export default function Login() {
 
     setLoading(true);
 
-    // Mock API Auth Validation Call
-    setTimeout(() => {
-      setLoading(false);
-      // Accept any email and password combination to bypass login block for testing
-      localStorage.setItem('sarvo_token', 'mock_jwt_token_xxxxxx');
-      localStorage.setItem('sarvo_user', JSON.stringify({
-        name: email.split('@')[0].toUpperCase(),
-        email: email,
-        role: 'Admin',
-        avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120'
-      }));
-      navigate('/dashboard');
-    }, 800);
+    api.post('/auth/login', { email, password })
+      .then((res) => {
+        setLoading(false);
+        const { token, user } = res.data;
+        sessionStorage.setItem('sarvo_token', token);
+        sessionStorage.setItem('sarvo_user', JSON.stringify({
+          ...user,
+          avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120'
+        }));
+        
+        // Redirect based on role
+        if (user.role === 'SUPER_ADMIN' || user.role === 'Super Admin') {
+          navigate('/superadmin/analytics');
+        } else {
+          navigate('/dashboard');
+        }
+      })
+      .catch((err) => {
+        setLoading(false);
+        setError(err.response?.data?.message || 'Login failed. Please verify credentials.');
+      });
   };
 
   return (

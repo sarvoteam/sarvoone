@@ -1,7 +1,8 @@
 import express from 'express';
+import superadminRouter from '../features/superadmin/superadmin.module.js';
 import emailRouter from '../features/email/email.module.js';
 import authRouter from '../features/auth/auth.module.js';
-import companiesRouter from '../features/erp/companies/companies.module.js';
+import businessesRouter from '../features/erp/businesses/businesses.module.js';
 import branchesRouter from '../features/erp/branches/branches.module.js';
 import customersRouter from '../features/erp/customers/customers.module.js';
 import suppliersRouter from '../features/erp/suppliers/suppliers.module.js';
@@ -24,9 +25,10 @@ import notificationsRouter from '../features/notifications/notifications.module.
 const router = express.Router();
 
 // Mount Features
+router.use('/superadmin', superadminRouter);
 router.use('/email', emailRouter);
 router.use('/auth', authRouter);
-router.use('/erp/companies', companiesRouter);
+router.use('/erp/businesses', businessesRouter);
 router.use('/erp/branches', branchesRouter);
 router.use('/erp/customers', customersRouter);
 router.use('/erp/suppliers', suppliersRouter);

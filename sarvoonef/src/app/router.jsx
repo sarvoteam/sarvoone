@@ -6,7 +6,8 @@ import Login from '../features/auth/pages/Login';
 import Register from '../features/auth/pages/Register';
 import ForgotPassword from '../features/auth/pages/ForgotPassword';
 import { AuthGuard, GuestGuard } from '../features/auth/components/AuthGuard';
-import { appRoutes } from '../routes';
+import { appRoutes, superAdminRoutes } from '../routes';
+import SuperAdminLayout from '../layouts/SuperAdminLayout/SuperAdminLayout';
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,21 @@ export const router = createBrowserRouter([
         element: <Navigate to="/dashboard" replace />
       },
       ...appRoutes
+    ]
+  },
+  {
+    path: '/superadmin',
+    element: (
+      <AuthGuard>
+        <SuperAdminLayout />
+      </AuthGuard>
+    ),
+    children: [
+      {
+        index: true,
+        element: <Navigate to="/superadmin/analytics" replace />
+      },
+      ...superAdminRoutes
     ]
   },
   {

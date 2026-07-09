@@ -1,0 +1,59 @@
+model Business {
+  id               String            @id @default(uuid())
+  name             String
+  email            String?
+  phone            String?
+  address          String?
+  ownerName        String?           @map("owner_name")
+  category         String?           @map("category")
+  state            String?           @map("state")
+  city             String?           @map("city")
+  plan             String?           @map("plan")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+  branches         Branch[]
+  businessSettings BusinessSetting[]
+
+  @@map("businesses")
+}
+
+model Branch {
+  id                    String                 @id @default(uuid())
+  businessId            String                 @map("business_id")
+  name                  String
+  address               String?
+  phone                 String?
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  business              Business               @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  customers             Customer[]
+  suppliers             Supplier[]
+  categories            Category[]
+  brands                Brand[]
+  units                 Unit[]
+  products              Product[]
+  inventoryTransactions InventoryTransaction[]
+  purchaseOrders        PurchaseOrder[]
+  salesOrders           SalesOrder[]
+  warehouses            Warehouse[]
+  transfersFrom         StockTransfer[]        @relation("FromBranch")
+  transfersTo           StockTransfer[]        @relation("ToBranch")
+  payments              Payment[]
+  expenses              Expense[]
+  employees             Employee[]
+  notifications         Notification[]
+
+  @@map("branches")
+}
+
+model BusinessSetting {
+  id         String   @id @default(uuid())
+  businessId String   @map("business_id")
+  key        String
+  value      String
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  business   Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+
+  @@map("business_settings")
+}

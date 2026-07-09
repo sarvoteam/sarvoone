@@ -11,7 +11,12 @@ export class BranchesRepository {
   }
 
   async findMany(filters = {}) {
-    return this.model.findMany({ where: filters });
+    return this.model.findMany({ 
+      where: filters,
+      include: {
+        business: true
+      }
+    });
   }
 
   async findById(id) {

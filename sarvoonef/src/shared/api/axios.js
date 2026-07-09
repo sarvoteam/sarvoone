@@ -10,7 +10,7 @@ const api = axios.create({
 // Request Interceptor: Attach JWT Token
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('sarvo_token');
+    const token = sessionStorage.getItem('sarvo_token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -26,8 +26,8 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response && error.response.status === 401) {
-      localStorage.removeItem('sarvo_token');
-      localStorage.removeItem('sarvo_user');
+      sessionStorage.removeItem('sarvo_token');
+      sessionStorage.removeItem('sarvo_user');
       window.location.href = '/auth/login';
     }
     return Promise.reject(error);

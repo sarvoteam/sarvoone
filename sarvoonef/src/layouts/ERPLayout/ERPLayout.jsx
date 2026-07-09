@@ -16,6 +16,7 @@ import {
   Package,
   TrendingUp,
   ShieldCheck,
+  ShieldAlert,
   ArrowLeftRight,
   Settings,
   LogOut,
@@ -31,14 +32,14 @@ export default function ERPLayout() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [user, setUser] = useState({
     name: 'Emily Lynch',
-    email: 'admin@sarvo.com',
-    role: 'Admin',
+    email: 'superadmin@sarvo.com',
+    role: 'Super Admin',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120'
   });
 
   // Load user session on mount
   useEffect(() => {
-    const savedUser = localStorage.getItem('sarvo_user');
+    const savedUser = sessionStorage.getItem('sarvo_user');
     if (savedUser) {
       try {
         setUser(JSON.parse(savedUser));
@@ -53,7 +54,8 @@ export default function ERPLayout() {
     basicInfo: true,
     accounting: false,
     stocks: false,
-    sales: false
+    sales: false,
+    superAdmin: false
   });
 
   const toggleSubmenu = (menu) => {
@@ -64,8 +66,8 @@ export default function ERPLayout() {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('sarvo_token');
-    localStorage.removeItem('sarvo_user');
+    sessionStorage.removeItem('sarvo_token');
+    sessionStorage.removeItem('sarvo_user');
     navigate('/auth/login');
   };
 
@@ -321,6 +323,51 @@ export default function ERPLayout() {
               {!isCollapsed && <span>General Settings</span>}
             </div>
           </div>
+
+          {/* Super Admin Accordion */}
+          {user && (user.role === 'Super Admin' || user.role === 'SUPER_ADMIN') && (
+            <div className="menu-item-wrapper" style={{ borderTop: '1px solid #f3f4f6', marginTop: '10px', paddingTop: '10px' }}>
+              <div className="menu-item" onClick={() => toggleSubmenu('superAdmin')}>
+                <div className="menu-item-left">
+                  <ShieldAlert className="menu-item-icon" style={{ color: '#7c3aed' }} size={18} />
+                  {!isCollapsed && <span style={{ fontWeight: 600, color: '#7c3aed' }}>Super Admin Portal</span>}
+                </div>
+                {!isCollapsed && (expandedMenus.superAdmin ? <ChevronDown size={14} style={{ color: '#7c3aed' }} /> : <ChevronRight size={14} style={{ color: '#7c3aed' }} />)}
+              </div>
+              {!isCollapsed && expandedMenus.superAdmin && (
+                <div className="menu-submenu">
+                  <div 
+                    className={`submenu-item ${location.pathname === '/superadmin/analytics' ? 'active' : ''}`}
+                    onClick={() => navigate('/superadmin/analytics')}
+                    style={{ cursor: 'pointer', paddingLeft: '32px' }}
+                  >
+                    Platform Analytics
+                  </div>
+                  <div 
+                    className={`submenu-item ${location.pathname === '/superadmin/businesses' ? 'active' : ''}`}
+                    onClick={() => navigate('/superadmin/businesses')}
+                    style={{ cursor: 'pointer', paddingLeft: '32px' }}
+                  >
+                    Business Accounts
+                  </div>
+                  <div 
+                    className={`submenu-item ${location.pathname === '/superadmin/subscriptions' ? 'active' : ''}`}
+                    onClick={() => navigate('/superadmin/subscriptions')}
+                    style={{ cursor: 'pointer', paddingLeft: '32px' }}
+                  >
+                    Subscription Tiers
+                  </div>
+                  <div 
+                    className={`submenu-item ${location.pathname === '/superadmin/support' ? 'active' : ''}`}
+                    onClick={() => navigate('/superadmin/support')}
+                    style={{ cursor: 'pointer', paddingLeft: '32px' }}
+                  >
+                    Support Tickets
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </nav>
       </aside>
 
