@@ -83,7 +83,7 @@ export default function Settings() {
           </h3>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px', color: '#6b7280' }}>
             <div>Last backup: **Today, 10:20 AM**</div>
-            <div>Active user: **Emily Lynch (Admin)**</div>
+            <div>Active user: **Emily Lynch (Super Admin)**</div>
             <div>Branches status: **2 Online, 1 Offline**</div>
           </div>
         </div>

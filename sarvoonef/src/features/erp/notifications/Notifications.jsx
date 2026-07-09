@@ -50,7 +50,7 @@ export default function Notifications() {
           <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#4b5563', cursor: 'pointer' }}>
             <input type="checkbox" checked={emailAlerts} onChange={(e) => setEmailAlerts(e.target.checked)} />
             <Mail size={16} style={{ color: '#6b7280' }} />
-            <span>Send Email Updates to Administrator</span>
+            <span>Send Email Updates to Super Administrator</span>
           </label>
 
           <label style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px', color: '#4b5563', cursor: 'pointer' }}>

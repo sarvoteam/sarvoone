@@ -28,4 +28,17 @@ export class AuthRepository {
   async delete(id) {
     return this.model.delete({ where: { id } });
   }
+
+  async findByEmailWithRoles(email) {
+    return this.model.findUnique({
+      where: { email },
+      include: {
+        roles: {
+          include: {
+            role: true
+          }
+        }
+      }
+    });
+  }
 }

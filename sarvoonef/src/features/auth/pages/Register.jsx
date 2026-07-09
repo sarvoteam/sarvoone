@@ -25,11 +25,11 @@ export default function Register() {
     setTimeout(() => {
       setLoading(false);
       // Auto login on register
-      localStorage.setItem('sarvo_token', 'mock_jwt_token_xxxxxx');
-      localStorage.setItem('sarvo_user', JSON.stringify({
+      sessionStorage.setItem('sarvo_token', 'mock_jwt_token_xxxxxx');
+      sessionStorage.setItem('sarvo_user', JSON.stringify({
         name: fullName,
         email: email,
-        role: 'Admin',
+        role: 'Super Admin',
         businessName: businessName,
         avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120'
       }));

@@ -19,9 +19,24 @@ app.use(express.urlencoded({ extended: true }));
 
 // HTTP Request Logger
 if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-} else {
-  app.use(morgan('combined'));
+  app.use((req, res, next) => {
+    const start = Date.now();
+    res.on('finish', () => {
+      const duration = Date.now() - start;
+      let statusColor = '\x1b[32m'; // Green
+      if (res.statusCode >= 300 && res.statusCode < 400) {
+        statusColor = '\x1b[33m'; // Yellow
+      } else if (res.statusCode >= 400) {
+        statusColor = '\x1b[31m'; // Red
+      }
+      
+      console.log(`\x1b[1m\x1b[35m[API Request]\x1b[0m ${req.method} ${req.originalUrl} - ${statusColor}${res.statusCode}\x1b[0m - \x1b[33m${duration}ms\x1b[0m`);
+      if (req.method !== 'GET' && req.body && Object.keys(req.body).length > 0) {
+        console.log(`\x1b[90m  └─ Body: ${JSON.stringify(req.body)}\x1b[0m`);
+      }
+    });
+    next();
+  });
 }
 
 // Static folder for file uploads (located at project root, one level up from src)
