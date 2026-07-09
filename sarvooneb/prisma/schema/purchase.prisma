@@ -1,0 +1,30 @@
+model PurchaseOrder {
+  id          String              @id @default(uuid())
+  branchId    String              @map("branch_id")
+  supplierId  String              @map("supplier_id")
+  orderNumber String              @map("order_number")
+  status      String
+  totalAmount Float               @map("total_amount")
+  taxAmount   Float               @map("tax_amount")
+  createdAt   DateTime            @default(now()) @map("created_at")
+  updatedAt   DateTime            @updatedAt @map("updated_at")
+  branch      Branch              @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  supplier    Supplier            @relation(fields: [supplierId], references: [id], onDelete: Cascade)
+  items       PurchaseOrderItem[]
+
+  @@map("purchase_orders")
+}
+
+model PurchaseOrderItem {
+  id              String        @id @default(uuid())
+  purchaseOrderId String        @map("purchase_order_id")
+  productId       String        @map("product_id")
+  quantity        Float
+  price           Float
+  gst             Float         @default(0)
+  total           Float
+  purchaseOrder   PurchaseOrder @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
+  product         Product       @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("purchase_order_items")
+}

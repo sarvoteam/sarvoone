@@ -1,0 +1,69 @@
+model Category {
+  id          String    @id @default(uuid())
+  branchId    String    @map("branch_id")
+  name        String
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  branch      Branch    @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Brand {
+  id          String    @id @default(uuid())
+  branchId    String    @map("branch_id")
+  name        String
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  branch      Branch    @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  products    Product[]
+
+  @@map("brands")
+}
+
+model Unit {
+  id        String    @id @default(uuid())
+  branchId  String    @map("branch_id")
+  name      String
+  shortName String    @map("short_name")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  branch    Branch    @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  products  Product[]
+
+  @@map("units")
+}
+
+model Product {
+  id                    String                 @id @default(uuid())
+  branchId              String                 @map("branch_id")
+  categoryId            String?                @map("category_id")
+  brandId               String?                @map("brand_id")
+  unitId                String?                @map("unit_id")
+  name                  String
+  sku                   String?
+  barcode               String?
+  hsn                   String?
+  gst                   Float                  @default(0)
+  mrp                   Float                  @default(0)
+  sellingPrice          Float                  @default(0) @map("selling_price")
+  purchasePrice         Float                  @default(0) @map("purchase_price")
+  imageUrl              String?                @map("image_url")
+  currentStock          Float                  @default(0) @map("current_stock")
+  reorderLevel          Float                  @default(0) @map("reorder_level")
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  branch                Branch                 @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  category              Category?              @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  brand                 Brand?                 @relation(fields: [brandId], references: [id], onDelete: SetNull)
+  unit                  Unit?                  @relation(fields: [unitId], references: [id], onDelete: SetNull)
+  inventoryTransactions InventoryTransaction[]
+  purchaseOrderItems    PurchaseOrderItem[]
+  salesOrderItems       SalesOrderItem[]
+  stockTransfers        StockTransfer[]
+
+  @@map("products")
+}

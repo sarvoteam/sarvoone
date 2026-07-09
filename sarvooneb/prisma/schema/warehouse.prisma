@@ -1,0 +1,11 @@
+model Warehouse {
+  id        String   @id @default(uuid())
+  branchId  String   @map("branch_id")
+  name      String
+  address   String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  branch    Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("warehouses")
+}

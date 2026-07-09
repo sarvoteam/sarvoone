@@ -1,0 +1,28 @@
+model Employee {
+  id         String       @id @default(uuid())
+  branchId   String       @map("branch_id")
+  name       String
+  email      String?
+  phone      String?
+  role       String
+  salary     Float        @default(0)
+  createdAt  DateTime     @default(now()) @map("created_at")
+  updatedAt  DateTime     @updatedAt @map("updated_at")
+  branch     Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  attendance Attendance[]
+
+  @@map("employees")
+}
+
+model Attendance {
+  id         String   @id @default(uuid())
+  employeeId String   @map("employee_id")
+  date       DateTime
+  status     String   // PRESENT, ABSENT, LEAVE
+  clockIn    DateTime? @map("clock_in")
+  clockOut   DateTime? @map("clock_out")
+  createdAt  DateTime @default(now()) @map("created_at")
+  employee   Employee @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+
+  @@map("attendance")
+}

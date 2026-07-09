@@ -1,0 +1,31 @@
+model SalesOrder {
+  id          String           @id @default(uuid())
+  branchId    String           @map("branch_id")
+  customerId  String?          @map("customer_id")
+  orderNumber String           @map("order_number")
+  orderType   String           @map("order_type") // POS, ONLINE, MANUAL
+  status      String
+  totalAmount Float            @map("total_amount")
+  taxAmount   Float            @map("tax_amount")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  branch      Branch           @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  customer    Customer?        @relation(fields: [customerId], references: [id], onDelete: SetNull)
+  items       SalesOrderItem[]
+
+  @@map("sales_orders")
+}
+
+model SalesOrderItem {
+  id           String     @id @default(uuid())
+  salesOrderId String     @map("sales_order_id")
+  productId    String     @map("product_id")
+  quantity     Float
+  price        Float
+  gst          Float      @default(0)
+  total        Float
+  salesOrder   SalesOrder @relation(fields: [salesOrderId], references: [id], onDelete: Cascade)
+  product      Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("sales_order_items")
+}

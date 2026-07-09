@@ -1,0 +1,11 @@
+model Notification {
+  id        String   @id @default(uuid())
+  branchId  String   @map("branch_id")
+  title     String
+  message   String
+  status    String   // UNREAD, READ
+  createdAt DateTime @default(now()) @map("created_at")
+  branch    Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}

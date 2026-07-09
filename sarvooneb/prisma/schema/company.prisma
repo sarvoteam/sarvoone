@@ -1,0 +1,54 @@
+model Company {
+  id              String           @id @default(uuid())
+  name            String
+  email           String?
+  phone           String?
+  address         String?
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  branches        Branch[]
+  companySettings CompanySetting[]
+
+  @@map("companies")
+}
+
+model Branch {
+  id                    String                 @id @default(uuid())
+  companyId             String                 @map("company_id")
+  name                  String
+  address               String?
+  phone                 String?
+  createdAt             DateTime               @default(now()) @map("created_at")
+  updatedAt             DateTime               @updatedAt @map("updated_at")
+  company               Company                @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  customers             Customer[]
+  suppliers             Supplier[]
+  categories            Category[]
+  brands                Brand[]
+  units                 Unit[]
+  products              Product[]
+  inventoryTransactions InventoryTransaction[]
+  purchaseOrders        PurchaseOrder[]
+  salesOrders           SalesOrder[]
+  warehouses            Warehouse[]
+  transfersFrom         StockTransfer[]        @relation("FromBranch")
+  transfersTo           StockTransfer[]        @relation("ToBranch")
+  payments              Payment[]
+  expenses              Expense[]
+  employees             Employee[]
+  notifications         Notification[]
+
+  @@map("branches")
+}
+
+model CompanySetting {
+  id        String   @id @default(uuid())
+  companyId String   @map("company_id")
+  key       String
+  value     String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  company   Company  @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  @@map("company_settings")
+}

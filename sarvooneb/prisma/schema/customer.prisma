@@ -1,0 +1,18 @@
+model Customer {
+  id                 String       @id @default(uuid())
+  branchId           String       @map("branch_id")
+  name               String
+  phone              String?
+  email              String?
+  gstin              String?
+  address            String?
+  creditLimit        Float        @default(0) @map("credit_limit")
+  outstandingBalance Float        @default(0) @map("outstanding_balance")
+  loyaltyPoints      Int          @default(0) @map("loyalty_points")
+  createdAt          DateTime     @default(now()) @map("created_at")
+  updatedAt          DateTime     @updatedAt @map("updated_at")
+  branch             Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  salesOrders        SalesOrder[]
+
+  @@map("customers")
+}

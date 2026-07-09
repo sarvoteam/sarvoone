@@ -1,0 +1,15 @@
+model StockTransfer {
+  id           String   @id @default(uuid())
+  fromBranchId String   @map("from_branch_id")
+  toBranchId   String   @map("to_branch_id")
+  productId    String   @map("product_id")
+  quantity     Float
+  status       String
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  fromBranch   Branch   @relation("FromBranch", fields: [fromBranchId], references: [id], onDelete: Cascade)
+  toBranch     Branch   @relation("ToBranch", fields: [toBranchId], references: [id], onDelete: Cascade)
+  product      Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("stock_transfers")
+}

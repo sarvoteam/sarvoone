@@ -1,0 +1,13 @@
+model InventoryTransaction {
+  id        String   @id @default(uuid())
+  branchId  String   @map("branch_id")
+  productId String   @map("product_id")
+  type      String   // PURCHASE, SALE, RETURN, ADJUSTMENT, DAMAGE, TRANSFER
+  quantity  Float
+  note      String?
+  createdAt DateTime @default(now()) @map("created_at")
+  branch    Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@map("inventory_transactions")
+}

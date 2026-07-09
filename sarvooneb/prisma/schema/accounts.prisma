@@ -1,0 +1,25 @@
+model Payment {
+  id              String   @id @default(uuid())
+  branchId        String   @map("branch_id")
+  type            String   // RECEIPT, PAYMENT
+  method          String   // CASH, CARD, UPI, BANK_TRANSFER
+  amount          Float
+  referenceNumber String?  @map("reference_number")
+  createdAt       DateTime @default(now()) @map("created_at")
+  branch          Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("payments")
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  branchId    String   @map("branch_id")
+  category    String
+  amount      Float
+  description String?
+  date        DateTime
+  createdAt   DateTime @default(now()) @map("created_at")
+  branch      Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("expenses")
+}
