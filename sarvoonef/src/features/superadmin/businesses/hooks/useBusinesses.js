@@ -64,7 +64,7 @@ export const useBusinesses = () => {
 
     return onboardBusinessApi(payload)
       .then(() => {
-        alert("Business onboarded successfully!");
+        alert("Business onboarded successfully! Temporary credentials have been generated and sent to the owner's email address.");
         fetchBusinesses();
       })
       .catch(err => {

@@ -1,30 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 import SessionList from '../components/SessionList';
-
-const initialSessions = [
-  { id: 1, browser: 'Chrome 125', os: 'Windows 11', device: 'Desktop', userName: 'Emily Lynch', email: 'sarvooneteam@gmail.com', ip: '103.45.201.88', location: 'New Delhi, DL', lastActive: 'Active Now' },
-  { id: 2, browser: 'Safari Mobile', os: 'iOS 17.4', device: 'Mobile', userName: 'Rohit Ghanghav', email: 'rohit.ghanghav6633@gmail.com', ip: '192.168.1.12', location: 'Mumbai, MH', lastActive: '2 mins ago' },
-  { id: 3, browser: 'Firefox Developer Edition', os: 'macOS Sonoma', device: 'Desktop', userName: 'Alexander Medvedev', email: 'alex.med@gmail.com', ip: '82.90.155.12', location: 'Saint Petersburg, RU', lastActive: '15 mins ago' },
-  { id: 4, browser: 'Chrome Mobile', os: 'Android 14', device: 'Mobile', userName: 'Anastasia Golovko', email: 'anastasia@outlook.com', ip: '94.22.40.103', location: 'Kiev, UA', lastActive: '1 hour ago' }
-];
+import { Loader2 } from 'lucide-react';
+import { useUserSessions } from '../hooks/useUserSessions';
 
 export default function UserSessions() {
-  const [sessions, setSessions] = useState(initialSessions);
-
-  const handleRevoke = (id, userName) => {
-    if (confirm(`Are you sure you want to terminate the login session for: ${userName}?`)) {
-      setSessions(sessions.filter(s => s.id !== id));
-      alert(`Session for "${userName}" terminated successfully.`);
-    }
-  };
-
-  const handleRevokeAll = () => {
-    if (confirm('Warning: This will log out all other active system sessions. Proceed?')) {
-      // Keep only current session (id: 1)
-      setSessions(sessions.filter(s => s.id === 1));
-      alert('All other remote user sessions terminated.');
-    }
-  };
+  const {
+    sessions,
+    loading,
+    error,
+    handleRevoke,
+    handleRevokeAll
+  } = useUserSessions();
 
   return (
     <div style={{ padding: '20px', fontFamily: 'system-ui, sans-serif' }}>
@@ -42,7 +28,18 @@ export default function UserSessions() {
         </button>
       </div>
 
-      <SessionList sessions={sessions} onRevoke={handleRevoke} />
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 0', gap: '12px', color: '#6b7280' }}>
+          <Loader2 className="animate-spin" size={24} style={{ color: '#7c3aed' }} />
+          <span style={{ fontSize: '14px' }}>Loading session parameters...</span>
+        </div>
+      ) : error ? (
+        <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fee2e2', color: '#b91c1c', padding: '16px', borderRadius: '8px', fontSize: '13.5px', textAlign: 'center' }}>
+          {error}
+        </div>
+      ) : (
+        <SessionList sessions={sessions} onRevoke={handleRevoke} />
+      )}
     </div>
   );
 }

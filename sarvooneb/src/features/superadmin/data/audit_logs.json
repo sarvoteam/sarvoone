@@ -1,0 +1,42 @@
+[
+  {
+    "id": 5,
+    "timestamp": "2026-07-10 06:24:54",
+    "user": "Emily Lynch (Super Admin)",
+    "action": "Generate API Key",
+    "resource": "Generated API Key: Dynamic Integration Key",
+    "ip": "103.45.201.88"
+  },
+  {
+    "id": 1,
+    "timestamp": "2026-07-09 13:50:22",
+    "user": "Emily Lynch (Super Admin)",
+    "action": "Update Plan Price",
+    "resource": "Pro Plan package price to ₹2499",
+    "ip": "103.45.201.88"
+  },
+  {
+    "id": 2,
+    "timestamp": "2026-07-09 12:45:10",
+    "user": "System Trigger",
+    "action": "Create Invoice",
+    "resource": "Invoice INV-2026-001 for Sarvo Medical",
+    "ip": "127.0.0.1"
+  },
+  {
+    "id": 3,
+    "timestamp": "2026-07-09 11:32:05",
+    "user": "Emily Lynch (Super Admin)",
+    "action": "Suspend Tenant",
+    "resource": "Anastasia Grocery Outlet account",
+    "ip": "103.45.201.88"
+  },
+  {
+    "id": 4,
+    "timestamp": "2026-07-08 17:15:44",
+    "user": "Rohit Ghanghav (Merchant)",
+    "action": "Onboard Storefront",
+    "resource": "Vogue Boutique Apparel CP",
+    "ip": "192.168.1.12"
+  }
+]

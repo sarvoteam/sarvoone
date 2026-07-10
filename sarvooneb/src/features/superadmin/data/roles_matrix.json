@@ -1,0 +1,14 @@
+{
+  "SUPER_ADMIN": {
+    "manage_businesses": true,
+    "manage_users": true,
+    "view_financials": true,
+    "manage_system": true
+  },
+  "BUSINESS_OWNER": {
+    "manage_businesses": false,
+    "manage_users": true,
+    "view_financials": true,
+    "manage_system": false
+  }
+}
