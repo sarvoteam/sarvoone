@@ -1,33 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 import ApiKeyList from '../components/ApiKeyList';
-import { Plus } from 'lucide-react';
-
-const initialKeys = [
-  { id: 1, name: 'Production Backend API Sync', token: 'sk_live_51P8d...', scopes: 'Read/Write (Full)', created: '2026-07-08', status: 'Active' },
-  { id: 2, name: 'Zapier Webhook Integration', token: 'sk_live_90Ha...', scopes: 'Read Only (Metrics)', created: '2026-07-09', status: 'Active' },
-  { id: 3, name: 'Analytics Sync Dashboard', token: 'sk_test_7a1F...', scopes: 'Read Only', created: '2026-07-09', status: 'Revoked' }
-];
+import { useApiKeys } from '../hooks/useApiKeys';
+import { Plus, Loader2 } from 'lucide-react';
 
 export default function SecurityApiKeys() {
-  const [apiKeys, setApiKeys] = useState(initialKeys);
+  const { apiKeys, loading, error, handleAdd, handleRevoke } = useApiKeys();
 
-  const handleRevoke = (id) => {
-    if (confirm('Revoke this API Key permanently? Actions using this key will immediately fail.')) {
-      setApiKeys(apiKeys.map(k => k.id === id ? { ...k, status: 'Revoked' } : k));
-    }
-  };
-
-  const handleAdd = () => {
+  const handleAddKey = () => {
     const name = prompt('Enter API Key name/description:');
     if (name) {
-      setApiKeys([...apiKeys, {
-        id: Date.now(),
-        name,
-        token: `sk_live_${Math.random().toString(36).substring(2, 8)}...`,
-        scopes: 'Read/Write (Default)',
-        created: new Date().toISOString().split('T')[0],
-        status: 'Active'
-      }]);
+      handleAdd(name);
     }
   };
 
@@ -40,14 +22,25 @@ export default function SecurityApiKeys() {
         </div>
 
         <button 
-          onClick={handleAdd}
+          onClick={handleAddKey}
           style={{ display: 'flex', alignItems: 'center', gap: '6px', backgroundColor: '#7c3aed', color: '#fff', border: 'none', padding: '8px 16px', borderRadius: '8px', fontSize: '13px', fontWeight: 600, cursor: 'pointer' }}
         >
           <Plus size={16} /> Generate Key
         </button>
       </div>
 
-      <ApiKeyList apiKeys={apiKeys} onRevoke={handleRevoke} />
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 0', gap: '12px', color: '#6b7280' }}>
+          <Loader2 className="animate-spin" size={24} style={{ color: '#7c3aed' }} />
+          <span style={{ fontSize: '14px' }}>Loading API keys...</span>
+        </div>
+      ) : error ? (
+        <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fee2e2', color: '#b91c1c', padding: '16px', borderRadius: '8px', fontSize: '13.5px', textAlign: 'center' }}>
+          {error}
+        </div>
+      ) : (
+        <ApiKeyList apiKeys={apiKeys} onRevoke={handleRevoke} />
+      )}
     </div>
   );
 }

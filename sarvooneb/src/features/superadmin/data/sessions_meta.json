@@ -1,0 +1,16 @@
+{
+  "39909925-6cd1-49c4-a75b-74cd5b51ad9e": {
+    "browser": "Chrome 125",
+    "os": "Windows 11",
+    "device": "Desktop",
+    "ip": "103.45.201.88",
+    "location": "New Delhi, DL"
+  },
+  "6c9e5d09-b4fa-421e-a4fc-69ca2d526e6b": {
+    "browser": "Safari Mobile",
+    "os": "iOS 17.4",
+    "device": "Mobile",
+    "ip": "192.168.1.12",
+    "location": "Mumbai, MH"
+  }
+}

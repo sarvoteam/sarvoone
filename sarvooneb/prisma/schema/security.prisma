@@ -1,0 +1,32 @@
+model AuditLog {
+  id        String   @id @default(uuid())
+  timestamp DateTime @default(now())
+  user      String
+  action    String
+  resource  String
+  ip        String?
+
+  @@map("audit_logs")
+}
+
+model LoginHistory {
+  id        String   @id @default(uuid())
+  timestamp DateTime @default(now())
+  email     String
+  ip        String?
+  agent     String?
+  status    String
+
+  @@map("login_histories")
+}
+
+model ApiKey {
+  id        String   @id @default(uuid())
+  name      String
+  token     String   @unique
+  scopes    String
+  created   DateTime @default(now())
+  status    String   // e.g. "Active", "Revoked"
+
+  @@map("api_keys")
+}

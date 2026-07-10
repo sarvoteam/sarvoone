@@ -1,40 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import UserTable from '../components/UserTable';
-import { Search } from 'lucide-react';
-
-const initialUsers = [
-  { id: 1, name: 'Emily Lynch', email: 'sarvooneteam@gmail.com', role: 'Super Admin', status: 'Active', joinedDate: '2026-07-08' },
-  { id: 2, name: 'Rohit Ghanghav', email: 'rohit.ghanghav6633@gmail.com', role: 'Business Owner', status: 'Active', joinedDate: '2026-07-09' },
-  { id: 3, name: 'Alexander Medvedev', email: 'alex.med@gmail.com', role: 'Business Owner', status: 'Active', joinedDate: '2026-07-09' },
-  { id: 4, name: 'Anastasia Golovko', email: 'anastasia@outlook.com', role: 'Business Owner', status: 'Suspended', joinedDate: '2026-07-09' }
-];
+import { Search, Loader2 } from 'lucide-react';
+import { useUserAccounts } from '../hooks/useUserAccounts';
 
 export default function UserAccounts() {
-  const [users, setUsers] = useState(initialUsers);
-  const [search, setSearch] = useState('');
-
-  const toggleStatus = (id) => {
-    setUsers(users.map(u => {
-      if (u.id === id) {
-        const newStatus = u.status === 'Active' ? 'Suspended' : 'Active';
-        alert(`User account for "${u.name}" is now ${newStatus}`);
-        return { ...u, status: newStatus };
-      }
-      return u;
-    }));
-  };
-
-  const resetPassword = (id, name) => {
-    if (window.confirm(`Reset password for user "${name}" to default: "reset2026"?`)) {
-      alert(`Password for user "${name}" has been reset to "reset2026".`);
-    }
-  };
-
-  const filtered = users.filter(u => 
-    u.name.toLowerCase().includes(search.toLowerCase()) ||
-    u.email.toLowerCase().includes(search.toLowerCase()) ||
-    u.role.toLowerCase().includes(search.toLowerCase())
-  );
+  const {
+    users,
+    loading,
+    error,
+    search,
+    setSearch,
+    roleFilter,
+    setRoleFilter,
+    statusFilter,
+    setStatusFilter,
+    toggleStatus,
+    resetPassword
+  } = useUserAccounts();
 
   return (
     <div style={{ padding: '20px', fontFamily: 'system-ui, sans-serif' }}>
@@ -43,25 +25,80 @@ export default function UserAccounts() {
         <p style={{ margin: '4px 0 0', fontSize: '12.5px', color: '#6b7280' }}>Monitor registered system credentials, modify user authorization roles, and toggle account activation status.</p>
       </div>
 
-      {/* Search Filter */}
-      <div style={{ display: 'flex', gap: '12px', marginBottom: '18px' }}>
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flex: 1 }}>
+      {/* Search & Dynamic Dropdown Filters */}
+      <div style={{ display: 'flex', gap: '12px', marginBottom: '18px', flexWrap: 'wrap' }}>
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flex: 1, minWidth: '280px' }}>
           <Search style={{ position: 'absolute', left: '12px', color: '#9ca3af' }} size={16} />
           <input 
             type="text" 
-            placeholder="Search by name, email, or authorization role..." 
+            placeholder="Search by name, email..." 
             value={search} 
             onChange={(e) => setSearch(e.target.value)}
             style={{ width: '100%', padding: '10px 12px 10px 38px', border: '1px solid #e5e7eb', borderRadius: '8px', fontSize: '13.5px', outline: 'none' }}
           />
         </div>
+
+        {/* Role Filter */}
+        <select
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
+          style={{
+            padding: '10px 16px',
+            border: '1px solid #e5e7eb',
+            borderRadius: '8px',
+            fontSize: '13.5px',
+            outline: 'none',
+            backgroundColor: '#fff',
+            color: '#374151',
+            cursor: 'pointer',
+            fontWeight: 500,
+            minWidth: '150px'
+          }}
+        >
+          <option value="">All Roles</option>
+          <option value="SUPER_ADMIN">Super Admin</option>
+          <option value="BUSINESS_OWNER">Business Owner</option>
+        </select>
+
+        {/* Status Filter */}
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          style={{
+            padding: '10px 16px',
+            border: '1px solid #e5e7eb',
+            borderRadius: '8px',
+            fontSize: '13.5px',
+            outline: 'none',
+            backgroundColor: '#fff',
+            color: '#374151',
+            cursor: 'pointer',
+            fontWeight: 500,
+            minWidth: '140px'
+          }}
+        >
+          <option value="">All Statuses</option>
+          <option value="Active">Active</option>
+          <option value="Suspended">Suspended</option>
+        </select>
       </div>
 
-      <UserTable 
-        users={filtered} 
-        onResetPassword={resetPassword} 
-        onToggleStatus={toggleStatus} 
-      />
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 0', gap: '12px', color: '#6b7280' }}>
+          <Loader2 className="animate-spin" size={24} style={{ color: '#7c3aed' }} />
+          <span style={{ fontSize: '14px' }}>Loading accounts...</span>
+        </div>
+      ) : error ? (
+        <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fee2e2', color: '#b91c1c', padding: '16px', borderRadius: '8px', fontSize: '13.5px', textAlign: 'center' }}>
+          {error}
+        </div>
+      ) : (
+        <UserTable 
+          users={users} 
+          onResetPassword={resetPassword} 
+          onToggleStatus={toggleStatus} 
+        />
+      )}
     </div>
   );
 }

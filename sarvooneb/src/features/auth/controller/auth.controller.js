@@ -77,18 +77,36 @@ export class AuthController {
   };
 
   login = async (req, res, next) => {
+    const { email, password } = req.body;
+    const ip = req.ip || req.headers['x-forwarded-for'] || '127.0.0.1';
+    const agent = req.headers['user-agent'] || 'Unknown Browser';
+
     try {
-      const { email, password } = req.body;
       if (!email || !password) {
         return res.status(400).json({ success: false, message: 'Email and password are required' });
       }
       const result = await this.service.login(email, password);
+
+      try {
+        const { logLogin } = await import('../../superadmin/security/utils/logger.js');
+        await logLogin({ email, ip, agent, status: 'Success' });
+      } catch (logErr) {
+        console.error('Logging failed:', logErr);
+      }
+
       return res.status(200).json({
         success: true,
         token: result.token,
         user: result.user
       });
     } catch (err) {
+      try {
+        const { logLogin } = await import('../../superadmin/security/utils/logger.js');
+        await logLogin({ email: email || 'unknown', ip, agent, status: 'Failed (Wrong PW)' });
+      } catch (logErr) {
+        console.error('Logging failed:', logErr);
+      }
+
       if (err.message === 'User not found' || err.message === 'Invalid password') {
         return res.status(401).json({ success: false, message: 'Invalid email or password' });
       }

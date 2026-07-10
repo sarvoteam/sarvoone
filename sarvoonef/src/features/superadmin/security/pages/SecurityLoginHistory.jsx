@@ -1,15 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import LoginHistoryTable from '../components/LoginHistoryTable';
-
-const initialAttempts = [
-  { id: 1, timestamp: '2026-07-09 13:57:06', email: 'sarvooneteam@gmail.com', ip: '103.45.201.88', agent: 'Chrome 125 / Win11', status: 'Success' },
-  { id: 2, timestamp: '2026-07-09 13:52:12', email: 'rohit.ghanghav6633@gmail.com', ip: '192.168.1.12', agent: 'Safari / iOS 17', status: 'Success' },
-  { id: 3, timestamp: '2026-07-09 12:44:00', email: 'unknown.hacker@gmail.com', ip: '203.0.113.50', agent: 'Curl / Linux', status: 'Failed (Wrong PW)' },
-  { id: 4, timestamp: '2026-07-09 09:12:33', email: 'alex.med@gmail.com', ip: '82.90.155.12', agent: 'Firefox / macOS', status: 'Success' }
-];
+import { useLoginHistory } from '../hooks/useLoginHistory';
+import { Loader2 } from 'lucide-react';
 
 export default function SecurityLoginHistory() {
-  const [attempts] = useState(initialAttempts);
+  const { attempts, loading, error } = useLoginHistory();
 
   return (
     <div style={{ padding: '20px', fontFamily: 'system-ui, sans-serif' }}>
@@ -18,7 +13,18 @@ export default function SecurityLoginHistory() {
         <p style={{ margin: '4px 0 0', fontSize: '12.5px', color: '#6b7280' }}>Audit successful and failed login entries, browser headers, and locations.</p>
       </div>
 
-      <LoginHistoryTable attempts={attempts} />
+      {loading ? (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '60px 0', gap: '12px', color: '#6b7280' }}>
+          <Loader2 className="animate-spin" size={24} style={{ color: '#7c3aed' }} />
+          <span style={{ fontSize: '14px' }}>Loading login history...</span>
+        </div>
+      ) : error ? (
+        <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fee2e2', color: '#b91c1c', padding: '16px', borderRadius: '8px', fontSize: '13.5px', textAlign: 'center' }}>
+          {error}
+        </div>
+      ) : (
+        <LoginHistoryTable attempts={attempts} />
+      )}
     </div>
   );
 }
