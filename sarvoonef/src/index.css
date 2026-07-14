@@ -105,3 +105,82 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+/* Unified Purple Gradient Theme Overrides */
+
+/* Overall Pages Background Tint */
+.erp-content {
+  background: radial-gradient(at 100% 100%, rgba(124, 58, 237, 0.03) 0%, transparent 80%),
+              #fcfaff !important;
+}
+
+/* Primary Button Styling */
+.btn-primary,
+button.btn-primary,
+.plan-btn.btn-solid,
+.btn-solid-submit {
+  background: linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25) !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-primary:hover,
+button.btn-primary:hover,
+.plan-btn.btn-solid:hover,
+.btn-solid-submit:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: 0 6px 16px rgba(124, 58, 237, 0.35) !important;
+}
+
+/* Card Styling (KPI cards, charts, data cards) */
+.kpi-card,
+.chart-card,
+.table-card,
+.card,
+.widget-card,
+.product-card,
+.inventory-card {
+  border: 1px solid rgba(124, 58, 237, 0.12) !important;
+  border-top: 4px solid #7c3aed !important;
+  border-radius: 12px !important;
+  background-color: #ffffff !important;
+  box-shadow: 0 10px 25px -5px rgba(124, 58, 237, 0.05), 
+              0 8px 10px -6px rgba(124, 58, 237, 0.03) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.kpi-card:hover,
+.chart-card:hover,
+.table-card:hover,
+.card:hover,
+.widget-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 12px 30px rgba(124, 58, 237, 0.1) !important;
+}
+
+/* Table Header and Row styling */
+table thead tr,
+.dashboard-table th {
+  background: linear-gradient(90deg, rgba(124, 58, 237, 0.06) 0%, rgba(124, 58, 237, 0.02) 100%) !important;
+  border-bottom: 2px solid rgba(124, 58, 237, 0.15) !important;
+  color: #5b21b6 !important;
+  font-weight: 700 !important;
+}
+
+table tbody tr td,
+.dashboard-table td {
+  border-bottom: 1px solid rgba(124, 58, 237, 0.06) !important;
+}
+
+/* Inputs & Form Fields focus styling */
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: #7c3aed !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15) !important;
+  outline: none !important;
+}

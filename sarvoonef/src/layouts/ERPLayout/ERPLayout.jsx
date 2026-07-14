@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { 
   ChevronDown, 
@@ -21,7 +21,10 @@ import {
   Settings,
   LogOut,
   User,
-  RefreshCw
+  RefreshCw,
+  ShoppingCart,
+  FileText,
+  Crown
 } from 'lucide-react';
 import './ERPLayout.css';
 
@@ -30,12 +33,25 @@ export default function ERPLayout() {
   const location = useLocation();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const profileMenuRef = useRef(null);
+
   const [user, setUser] = useState({
     name: 'Emily Lynch',
     email: 'superadmin@sarvo.com',
     role: 'Super Admin',
     avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120'
   });
+
+  // Close profile menu on outside clicks
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (profileMenuRef.current && !profileMenuRef.current.contains(e.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener('click', handleOutsideClick);
+    return () => document.removeEventListener('click', handleOutsideClick);
+  }, []);
 
   // Load user session on mount
   useEffect(() => {
@@ -76,17 +92,23 @@ export default function ERPLayout() {
       {/* Sidebar Navigation */}
       <aside className={`erp-sidebar ${isCollapsed ? 'collapsed' : ''}`}>
         <div className="sidebar-header">
-          <div className="logo-container">
+          <div 
+            className="logo-container" 
+            onClick={() => isCollapsed && setIsCollapsed(false)}
+            style={{ cursor: isCollapsed ? 'pointer' : 'default' }}
+          >
             <div className="logo-box">S</div>
             {!isCollapsed && <span className="brand-name">Sarvo One</span>}
           </div>
-          <button 
-            className="sidebar-toggle-btn" 
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            title="Toggle Sidebar"
-          >
-            <Menu size={18} />
-          </button>
+          {!isCollapsed && (
+            <button 
+              className="sidebar-toggle-btn" 
+              onClick={() => setIsCollapsed(!isCollapsed)}
+              title="Toggle Sidebar"
+            >
+              <Menu size={18} />
+            </button>
+          )}
         </div>
 
         {/* Sidebar Search */}
@@ -151,126 +173,59 @@ export default function ERPLayout() {
             )}
           </div>
 
-          {/* Basic Information Accordion */}
-          <div className="menu-item-wrapper">
-            <div className="menu-item" onClick={() => toggleSubmenu('basicInfo')}>
-              <div className="menu-item-left">
-                <Database className="menu-item-icon" size={18} />
-                {!isCollapsed && <span>Basic Information</span>}
-              </div>
-              {!isCollapsed && (expandedMenus.basicInfo ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
+          {/* Product Catalog Standalone */}
+          <div 
+            className={`menu-item ${location.pathname === '/products' ? 'active' : ''}`}
+            onClick={() => navigate('/products')}
+          >
+            <div className="menu-item-left">
+              <Database className="menu-item-icon" size={18} />
+              {!isCollapsed && <span>Product Catalog</span>}
             </div>
-            {!isCollapsed && expandedMenus.basicInfo && (
-              <div className="menu-submenu">
-                <div 
-                  className={`submenu-item ${location.pathname === '/products' ? 'active' : ''}`}
-                  onClick={() => navigate('/products')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Product Catalog
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/customers' ? 'active' : ''}`}
-                  onClick={() => navigate('/customers')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Customers Ledger
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/suppliers' ? 'active' : ''}`}
-                  onClick={() => navigate('/suppliers')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Suppliers Database
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/users' ? 'active' : ''}`}
-                  onClick={() => navigate('/users')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Users & Access
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* Stocks / Inventory Accordion */}
-          <div className="menu-item-wrapper">
-            <div className="menu-item" onClick={() => toggleSubmenu('stocks')}>
-              <div className="menu-item-left">
-                <Package className="menu-item-icon" size={18} />
-                {!isCollapsed && <span>Stocks</span>}
-              </div>
-              {!isCollapsed && (expandedMenus.stocks ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
+          {/* Inventory Items Standalone */}
+          <div 
+            className={`menu-item ${location.pathname === '/inventory' ? 'active' : ''}`}
+            onClick={() => navigate('/inventory')}
+          >
+            <div className="menu-item-left">
+              <Package className="menu-item-icon" size={18} />
+              {!isCollapsed && <span>Inventory Items</span>}
             </div>
-            {!isCollapsed && expandedMenus.stocks && (
-              <div className="menu-submenu">
-                <div 
-                  className={`submenu-item ${location.pathname === '/inventory' ? 'active' : ''}`}
-                  onClick={() => navigate('/inventory')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Inventory Items
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/stock-transfer' ? 'active' : ''}`}
-                  onClick={() => navigate('/stock-transfer')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Stock Transfers
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/warehouses' ? 'active' : ''}`}
-                  onClick={() => navigate('/warehouses')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Warehouses
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/barcodes' ? 'active' : ''}`}
-                  onClick={() => navigate('/barcodes')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Barcode Labels
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* Sales Accordion */}
-          <div className="menu-item-wrapper">
-            <div className="menu-item" onClick={() => toggleSubmenu('sales')}>
-              <div className="menu-item-left">
-                <TrendingUp className="menu-item-icon" size={18} />
-                {!isCollapsed && <span>Sales & Purchases</span>}
-              </div>
-              {!isCollapsed && (expandedMenus.sales ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
+          {/* POS Billing Terminal Standalone */}
+          <div 
+            className={`menu-item ${location.pathname === '/pos' ? 'active' : ''}`}
+            onClick={() => navigate('/pos')}
+          >
+            <div className="menu-item-left">
+              <ShoppingCart className="menu-item-icon" size={18} />
+              {!isCollapsed && <span>POS Billing Terminal</span>}
             </div>
-            {!isCollapsed && expandedMenus.sales && (
-              <div className="menu-submenu">
-                <div 
-                  className={`submenu-item ${location.pathname === '/pos' ? 'active' : ''}`}
-                  onClick={() => navigate('/pos')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  POS Billing Terminal
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/sales' ? 'active' : ''}`}
-                  onClick={() => navigate('/sales')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Sales Invoices
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/purchases' ? 'active' : ''}`}
-                  onClick={() => navigate('/purchases')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Purchase Orders
-                </div>
-              </div>
-            )}
+          </div>
+
+          {/* Sales Invoices Standalone */}
+          <div 
+            className={`menu-item ${location.pathname === '/sales' ? 'active' : ''}`}
+            onClick={() => navigate('/sales')}
+          >
+            <div className="menu-item-left">
+              <FileText className="menu-item-icon" size={18} />
+              {!isCollapsed && <span>Sales Invoices</span>}
+            </div>
+          </div>
+
+          {/* Purchase Orders Standalone */}
+          <div 
+            className={`menu-item ${location.pathname === '/purchases' ? 'active' : ''}`}
+            onClick={() => navigate('/purchases')}
+          >
+            <div className="menu-item-left">
+              <TrendingUp className="menu-item-icon" size={18} />
+              {!isCollapsed && <span>Purchase Orders</span>}
+            </div>
           </div>
 
           {/* Standalone navigation links */}
@@ -294,15 +249,7 @@ export default function ERPLayout() {
             </div>
           </div>
 
-          <div 
-            className={`menu-item ${location.pathname === '/notifications' ? 'active' : ''}`}
-            onClick={() => navigate('/notifications')}
-          >
-            <div className="menu-item-left">
-              <Bell className="menu-item-icon" size={18} />
-              {!isCollapsed && <span>Notifications Warning</span>}
-            </div>
-          </div>
+
 
           <div 
             className={`menu-item ${location.pathname === '/branches' ? 'active' : ''}`}
@@ -326,13 +273,13 @@ export default function ERPLayout() {
 
           {/* Super Admin Accordion */}
           {user && (user.role === 'Super Admin' || user.role === 'SUPER_ADMIN') && (
-            <div className="menu-item-wrapper" style={{ borderTop: '1px solid #f3f4f6', marginTop: '10px', paddingTop: '10px' }}>
+            <div className="menu-item-wrapper" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.08)', marginTop: '10px', paddingTop: '10px' }}>
               <div className="menu-item" onClick={() => toggleSubmenu('superAdmin')}>
                 <div className="menu-item-left">
-                  <ShieldAlert className="menu-item-icon" style={{ color: '#7c3aed' }} size={18} />
-                  {!isCollapsed && <span style={{ fontWeight: 600, color: '#7c3aed' }}>Super Admin Portal</span>}
+                  <ShieldAlert className="menu-item-icon" style={{ color: '#c084fc' }} size={18} />
+                  {!isCollapsed && <span style={{ fontWeight: 600, color: '#c084fc' }}>Super Admin Portal</span>}
                 </div>
-                {!isCollapsed && (expandedMenus.superAdmin ? <ChevronDown size={14} style={{ color: '#7c3aed' }} /> : <ChevronRight size={14} style={{ color: '#7c3aed' }} />)}
+                {!isCollapsed && (expandedMenus.superAdmin ? <ChevronDown size={14} style={{ color: '#c084fc' }} /> : <ChevronRight size={14} style={{ color: '#c084fc' }} />)}
               </div>
               {!isCollapsed && expandedMenus.superAdmin && (
                 <div className="menu-submenu">
@@ -402,7 +349,11 @@ export default function ERPLayout() {
             {/* Profile Avatar & Dropdown Menu */}
             <div 
               className="user-profile" 
-              onClick={() => setShowProfileMenu(!showProfileMenu)}
+              ref={profileMenuRef}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowProfileMenu(!showProfileMenu);
+              }}
               style={{ position: 'relative' }}
             >
               <img 
@@ -410,117 +361,53 @@ export default function ERPLayout() {
                 alt="Profile" 
                 className="avatar-img" 
               />
-              {showProfileMenu && (
-                <div style={{
-                  position: 'absolute',
-                  top: '48px',
-                  right: '0',
-                  backgroundColor: 'rgba(255, 255, 255, 0.98)',
-                  backdropFilter: 'blur(12px)',
-                  border: '1px solid #e5e7eb',
-                  borderRadius: '16px',
-                  boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-                  padding: '16px',
-                  width: '240px',
-                  zIndex: 9999,
-                  textAlign: 'left'
-                }} onClick={(e) => e.stopPropagation()}>
-                  
-                  {/* Premium Profile Info Header */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px', paddingBottom: '12px', borderBottom: '1px solid #f3f4f6', marginBottom: '8px' }}>
-                    <img 
-                      src={user.avatar} 
-                      alt={user.name} 
-                      style={{ width: '40px', height: '40px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #7c3aed' }} 
-                    />
-                    <div>
-                      <div style={{ fontWeight: 700, color: '#1f2937', fontSize: '13.5px', lineHeight: '1.2' }}>{user.name}</div>
-                      <div style={{ color: '#6b7280', fontSize: '11px', marginTop: '2px', wordBreak: 'break-all' }}>{user.email}</div>
-                      <div style={{
-                        display: 'inline-block',
-                        backgroundColor: '#eff6ff',
-                        color: '#1d4ed8',
-                        fontSize: '9px',
-                        fontWeight: 700,
-                        padding: '1px 6px',
-                        borderRadius: '4px',
-                        marginTop: '4px'
-                      }}>{user.role}</div>
-                    </div>
-                  </div>
-
-                  {/* Actions Links */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-                    <div 
-                      onClick={() => { alert('Navigating to user profile setup...'); }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        padding: '8px 10px',
-                        borderRadius: '8px',
-                        fontSize: '13px',
-                        color: '#4b5563',
-                        cursor: 'pointer',
-                        fontWeight: 500,
-                        transition: 'all 0.2s'
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f9fafb'; e.currentTarget.style.color = '#1f2937'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#4b5563'; }}
-                    >
-                      <User size={15} style={{ color: '#9ca3af' }} />
-                      <span>My Account</span>
-                    </div>
-
-                    <div 
-                      onClick={() => { setShowProfileMenu(false); navigate('/settings'); }}
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        padding: '8px 10px',
-                        borderRadius: '8px',
-                        fontSize: '13px',
-                        color: '#4b5563',
-                        cursor: 'pointer',
-                        fontWeight: 500,
-                        transition: 'all 0.2s'
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f9fafb'; e.currentTarget.style.color = '#1f2937'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.color = '#4b5563'; }}
-                    >
-                      <Settings size={15} style={{ color: '#9ca3af' }} />
-                      <span>Account Settings</span>
-                    </div>
-
-                    <div style={{ borderTop: '1px solid #f3f4f6', margin: '6px 0' }} />
-
-                    <button 
-                      onClick={handleLogout}
-                      style={{
-                        width: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px',
-                        padding: '8px 10px',
-                        border: 'none',
-                        backgroundColor: 'transparent',
-                        color: '#ef4444',
-                        fontSize: '13px',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        borderRadius: '8px',
-                        transition: 'all 0.2s'
-                      }}
-                      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#fef2f2'; }}
-                      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
-                    >
-                      <LogOut size={15} />
-                      <span>Sign Out</span>
-                    </button>
+              <div 
+                className={`profile-dropdown-card ${showProfileMenu ? 'active' : ''}`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Premium Profile Info Header */}
+                <div className="profile-dropdown-header">
+                  <img 
+                    src={user.avatar} 
+                    alt={user.name} 
+                    className="profile-dropdown-avatar" 
+                  />
+                  <div>
+                    <div className="profile-dropdown-name">{user.name}</div>
+                    <div className="profile-dropdown-email">{user.email}</div>
+                    <div className="profile-dropdown-role">{user.role}</div>
                   </div>
                 </div>
-              )}
+ 
+                {/* Actions Links */}
+                <div className="profile-dropdown-actions">
+                  <div 
+                    onClick={() => { alert('Navigating to user profile setup...'); }}
+                    className="profile-dropdown-item"
+                  >
+                    <User size={15} />
+                    <span>My Account</span>
+                  </div>
+ 
+                  <div 
+                    onClick={() => { setShowProfileMenu(false); navigate('/settings'); }}
+                    className="profile-dropdown-item"
+                  >
+                    <Settings size={15} />
+                    <span>Account Settings</span>
+                  </div>
+ 
+                  <div className="profile-dropdown-divider" />
+ 
+                  <button 
+                    onClick={handleLogout}
+                    className="profile-dropdown-signout"
+                  >
+                    <LogOut size={15} />
+                    <span>Sign Out</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </header>

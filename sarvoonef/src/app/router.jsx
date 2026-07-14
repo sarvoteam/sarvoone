@@ -5,6 +5,7 @@ import AuthLayout from '../layouts/AuthLayout/AuthLayout';
 import Login from '../features/auth/pages/Login';
 import Register from '../features/auth/pages/Register';
 import ForgotPassword from '../features/auth/pages/ForgotPassword';
+import LandingPage from '../features/landing/pages/LandingPage';
 import { AuthGuard, GuestGuard } from '../features/auth/components/AuthGuard';
 import { appRoutes, superAdminRoutes } from '../routes';
 import SuperAdminLayout from '../layouts/SuperAdminLayout/SuperAdminLayout';
@@ -12,17 +13,21 @@ import SuperAdminLayout from '../layouts/SuperAdminLayout/SuperAdminLayout';
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: (
-      <AuthGuard>
-        <ERPLayout />
-      </AuthGuard>
-    ),
     children: [
       {
         index: true,
-        element: <Navigate to="/dashboard" replace />
+        element: <LandingPage />
       },
-      ...appRoutes
+      {
+        element: (
+          <AuthGuard>
+            <ERPLayout />
+          </AuthGuard>
+        ),
+        children: [
+          ...appRoutes
+        ]
+      }
     ]
   },
   {
