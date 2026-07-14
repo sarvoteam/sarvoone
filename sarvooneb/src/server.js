@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import app from './app.js';
 import pool from './config/database.js';
+import { ensureDefaultData } from './config/seed.js';
 
 // Load environment variables
 dotenv.config();
@@ -15,6 +16,9 @@ app.listen(PORT, async () => {
   try {
     const res = await pool.query('SELECT NOW()');
     console.log(`Database connection test successful. Current time on DB: ${res.rows[0].now}`);
+    
+    // Seed default records if needed
+    await ensureDefaultData();
   } catch (err) {
     console.error('Database connection test failed. Verify DATABASE_URL and password in .env.');
     console.error(`Error: ${err.message}`);
