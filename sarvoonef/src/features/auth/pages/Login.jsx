@@ -103,13 +103,6 @@ export default function Login() {
           <span>Sign In</span>
         )}
       </button>
-
-      <div className="auth-footer">
-        Don't have an account?{' '}
-        <Link to="/auth/register" className="auth-link">
-          Register here
-        </Link>
-      </div>
     </form>
   );
 }

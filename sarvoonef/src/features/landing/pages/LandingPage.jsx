@@ -80,14 +80,9 @@ export default function LandingPage() {
                 Go to Dashboard <ArrowRight size={15} />
               </button>
             ) : (
-              <>
-                <button onClick={() => navigate('/auth/login')} className="btn-outline-premium">
-                  Sign In
-                </button>
-                <button onClick={() => navigate('/auth/register')} className="btn-solid-premium">
-                  Start Free Trial
-                </button>
-              </>
+              <button onClick={() => navigate('/auth/login')} className="btn-outline-premium">
+                Sign In
+              </button>
             )}
           </div>
         </div>

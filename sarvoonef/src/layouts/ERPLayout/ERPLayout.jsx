@@ -111,20 +111,6 @@ export default function ERPLayout() {
           )}
         </div>
 
-        {/* Sidebar Search */}
-        {!isCollapsed && (
-          <div className="sidebar-search-box">
-            <div className="sidebar-search-wrapper">
-              <Search className="sidebar-search-icon" size={16} />
-              <input 
-                type="text" 
-                placeholder="Search tools..." 
-                className="sidebar-search-input" 
-              />
-            </div>
-          </div>
-        )}
-
         {/* Sidebar Menu Items */}
         <nav className="sidebar-menu">
           <div 
@@ -135,42 +121,6 @@ export default function ERPLayout() {
               <LayoutDashboard className="menu-item-icon" size={18} />
               {!isCollapsed && <span>Dashboard</span>}
             </div>
-          </div>
-
-          {/* Accounting Accordion */}
-          <div className="menu-item-wrapper">
-            <div className="menu-item" onClick={() => toggleSubmenu('accounting')}>
-              <div className="menu-item-left">
-                <Calculator className="menu-item-icon" size={18} />
-                {!isCollapsed && <span>Accounting</span>}
-              </div>
-              {!isCollapsed && (expandedMenus.accounting ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
-            </div>
-            {!isCollapsed && expandedMenus.accounting && (
-              <div className="menu-submenu">
-                <div 
-                  className={`submenu-item ${location.pathname === '/ledger' ? 'active' : ''}`}
-                  onClick={() => navigate('/ledger')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  General Ledger
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/journal' ? 'active' : ''}`}
-                  onClick={() => navigate('/journal')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  Journal Entries
-                </div>
-                <div 
-                  className={`submenu-item ${location.pathname === '/taxation' ? 'active' : ''}`}
-                  onClick={() => navigate('/taxation')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  GST & Taxation
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Product Catalog Standalone */}
@@ -249,6 +199,42 @@ export default function ERPLayout() {
             </div>
           </div>
 
+          {/* Accounting Accordion */}
+          <div className="menu-item-wrapper">
+            <div className="menu-item" onClick={() => toggleSubmenu('accounting')}>
+              <div className="menu-item-left">
+                <Calculator className="menu-item-icon" size={18} />
+                {!isCollapsed && <span>Accounting</span>}
+              </div>
+              {!isCollapsed && (expandedMenus.accounting ? <ChevronDown size={14} /> : <ChevronRight size={14} />)}
+            </div>
+            {!isCollapsed && expandedMenus.accounting && (
+              <div className="menu-submenu">
+                <div 
+                  className={`submenu-item ${location.pathname === '/ledger' ? 'active' : ''}`}
+                  onClick={() => navigate('/ledger')}
+                  style={{ cursor: 'pointer' }}
+                >
+                  General Ledger
+                </div>
+                <div 
+                  className={`submenu-item ${location.pathname === '/journal' ? 'active' : ''}`}
+                  onClick={() => navigate('/journal')}
+                  style={{ cursor: 'pointer' }}
+                >
+                  Journal Entries
+                </div>
+                <div 
+                  className={`submenu-item ${location.pathname === '/taxation' ? 'active' : ''}`}
+                  onClick={() => navigate('/taxation')}
+                  style={{ cursor: 'pointer' }}
+                >
+                  GST & Taxation
+                </div>
+              </div>
+            )}
+          </div>
+
 
 
           <div 
@@ -322,20 +308,21 @@ export default function ERPLayout() {
       <main className="erp-main">
         {/* Header Dashboard Navigation */}
         <header className="erp-header">
-          <div className="header-left">
-            <select className="period-dropdown" defaultValue="2026 Period">
-              <option value="2026 Period">2026 Period</option>
-              <option value="2025 Period">2025 Period</option>
-            </select>
+          <div className="header-left" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: '#059669', color: '#ffffff', padding: '4px 10px', borderRadius: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px', boxShadow: '0 2px 4px rgba(5, 150, 105, 0.15)' }}>
+              <span className="pulse-dot" style={{ backgroundColor: '#a7f3d0' }}></span>
+              Live Node
+            </span>
+            <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: '#7c3aed', color: '#ffffff', padding: '4px 10px', borderRadius: '12px', boxShadow: '0 2px 4px rgba(124, 58, 237, 0.15)' }}>
+              Role: {user.role || 'Super Admin'}
+            </span>
+            <span style={{ fontSize: '11px', fontWeight: 700, backgroundColor: '#d97706', color: '#ffffff', padding: '4px 10px', borderRadius: '12px', boxShadow: '0 2px 4px rgba(217, 119, 6, 0.15)' }}>
+              Financial Year: 2026-27
+            </span>
           </div>
 
           {/* Right Header Controls */}
           <div className="header-right">
-            <div className="header-search-wrapper">
-              <Search className="header-search-icon" size={14} />
-              <input type="text" placeholder="Search..." className="header-search-input" />
-            </div>
-
             <div className="header-actions">
               <button className="header-action-btn" title="View Logs History">
                 <History size={16} />
@@ -356,22 +343,49 @@ export default function ERPLayout() {
               }}
               style={{ position: 'relative' }}
             >
-              <img 
-                src={user.avatar} 
-                alt="Profile" 
-                className="avatar-img" 
-              />
+              <div 
+                className="avatar-letter" 
+                style={{ 
+                  width: '32px', 
+                  height: '32px', 
+                  borderRadius: '50%', 
+                  background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)', 
+                  color: '#ffffff', 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  fontWeight: 700, 
+                  fontSize: '14px', 
+                  border: '1.5px solid #e2e8f0',
+                  boxShadow: '0 2px 8px rgba(124, 58, 237, 0.2)' 
+                }}
+              >
+                {(user.name || 'U').charAt(0).toUpperCase()}
+              </div>
               <div 
                 className={`profile-dropdown-card ${showProfileMenu ? 'active' : ''}`}
                 onClick={(e) => e.stopPropagation()}
               >
                 {/* Premium Profile Info Header */}
                 <div className="profile-dropdown-header">
-                  <img 
-                    src={user.avatar} 
-                    alt={user.name} 
-                    className="profile-dropdown-avatar" 
-                  />
+                  <div 
+                    style={{ 
+                      width: '40px', 
+                      height: '40px', 
+                      borderRadius: '50%', 
+                      background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)', 
+                      color: '#ffffff', 
+                      display: 'flex', 
+                      alignItems: 'center', 
+                      justifyContent: 'center', 
+                      fontWeight: 700, 
+                      fontSize: '18px', 
+                      border: '1.5px solid #cbd5e1',
+                      marginRight: '4px'
+                    }}
+                  >
+                    {(user.name || 'U').charAt(0).toUpperCase()}
+                  </div>
                   <div>
                     <div className="profile-dropdown-name">{user.name}</div>
                     <div className="profile-dropdown-email">{user.email}</div>
@@ -382,7 +396,7 @@ export default function ERPLayout() {
                 {/* Actions Links */}
                 <div className="profile-dropdown-actions">
                   <div 
-                    onClick={() => { alert('Navigating to user profile setup...'); }}
+                    onClick={() => { setShowProfileMenu(false); navigate('/my-account'); }}
                     className="profile-dropdown-item"
                   >
                     <User size={15} />
