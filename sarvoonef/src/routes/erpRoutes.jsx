@@ -3,15 +3,16 @@ import Dashboard from '../features/erp/dashboard/pages/Dashboard';
 import InventoryList from '../features/erp/inventory/pages/InventoryList';
 import GeneralLedger from '../features/erp/accounting/pages/GeneralLedger';
 import JournalEntries from '../features/erp/accounting/pages/JournalEntries';
-import POSBilling from '../features/erp/sales/POSBilling';
+import POSBillingPage from '../features/erp/sales/pages/POSBillingPage';
 import ProductManagement from '../features/erp/products/ProductManagement';
 import PurchaseManagement from '../features/erp/purchases/PurchaseManagement';
-import SalesManagement from '../features/erp/sales/SalesManagement';
+import SalesManagementPage from '../features/erp/sales/pages/SalesManagementPage';
 import Taxation from '../features/erp/accounting/Taxation';
 import Reports from '../features/erp/reports/Reports';
 import EmployeeManagement from '../features/erp/employees/EmployeeManagement';
 import BranchManagement from '../features/erp/branches/BranchManagement';
 import Settings from '../features/erp/settings/Settings';
+import MyAccount from '../features/erp/settings/MyAccount';
 
 export const erpRoutes = [
   {
@@ -32,7 +33,7 @@ export const erpRoutes = [
   },
   {
     path: 'pos',
-    element: <POSBilling />
+    element: <POSBillingPage />
   },
   {
     path: 'products',
@@ -44,7 +45,7 @@ export const erpRoutes = [
   },
   {
     path: 'sales',
-    element: <SalesManagement />
+    element: <SalesManagementPage />
   },
   {
     path: 'taxation',
@@ -66,5 +67,9 @@ export const erpRoutes = [
   {
     path: 'settings',
     element: <Settings />
+  },
+  {
+    path: 'my-account',
+    element: <MyAccount />
   }
 ];

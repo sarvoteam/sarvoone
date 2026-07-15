@@ -83,13 +83,14 @@ export default function InventoryDetailModal({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
               <span style={{ 
-                fontSize: '11px', 
-                backgroundColor: '#eff6ff', 
-                color: '#1d4ed8', 
+                fontSize: '11.5px', 
+                backgroundColor: '#f5f3ff', 
+                color: '#7c3aed', 
                 fontWeight: 700, 
-                padding: '2px 8px', 
+                padding: '4px 10px', 
                 borderRadius: '6px',
-                textTransform: 'uppercase'
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
               }}>
                 {product.category || 'General'}
               </span>
@@ -172,23 +173,23 @@ export default function InventoryDetailModal({
               <Package size={15} style={{ color: '#7c3aed' }} /> Stock Levels
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px 16px', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
                 <span style={{ color: '#475569', fontSize: '13.5px' }}>Current Stock:</span>
-                <strong style={{ fontSize: '15px', color: isLowStock ? '#ef4444' : '#0f172a' }}>
+                <strong style={{ fontSize: '15px', color: isLowStock ? '#ef4444' : '#0f172a', textAlign: 'right' }}>
                   {product.stock} {product.unit || 'unit'}s
                 </strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px 16px', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
                 <span style={{ color: '#475569', fontSize: '13.5px' }}>Safety Reorder Level:</span>
-                <strong style={{ color: '#334155' }}>{product.reorderLevel || 0} {product.unit || 'unit'}s</strong>
+                <strong style={{ color: '#334155', textAlign: 'right' }}>{product.reorderLevel || 0} {product.unit || 'unit'}s</strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px 16px', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
                 <span style={{ color: '#475569', fontSize: '13.5px' }}>Damaged Stock Count:</span>
-                <strong style={{ color: product.damagedStock > 0 ? '#ef4444' : '#10b981' }}>
+                <strong style={{ color: product.damagedStock > 0 ? '#ef4444' : '#10b981', textAlign: 'right' }}>
                   {product.damagedStock || 0} {product.unit || 'unit'}s
                 </strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px 16px', alignItems: 'center' }}>
                 <span style={{ color: '#475569', fontSize: '13.5px' }}>Status Indicator:</span>
                 <StockStatusBadge stock={product.stock} reorderLevel={product.reorderLevel} />
               </div>
@@ -206,26 +207,26 @@ export default function InventoryDetailModal({
               <Layers size={15} style={{ color: '#7c3aed' }} /> Logistics Details
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px 16px', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
                 <span style={{ color: '#475569', fontSize: '13.5px' }}>Batch Number:</span>
-                <strong style={{ fontFamily: 'monospace', color: '#0f172a' }}>{product.batchNumber || 'N/A'}</strong>
+                <strong style={{ fontFamily: 'monospace', color: '#0f172a', textAlign: 'right' }}>{product.batchNumber || 'N/A'}</strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px 16px', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
                 <span style={{ color: '#475569', fontSize: '13.5px' }}>Expiry Date:</span>
-                <strong style={{ color: product.expiryDate ? '#b91c1c' : '#64748b' }}>
+                <strong style={{ color: product.expiryDate ? '#b91c1c' : '#64748b', textAlign: 'right' }}>
                   {product.expiryDate || 'N/A'}
                 </strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px 16px', alignItems: 'center', borderBottom: '1px solid #e2e8f0', paddingBottom: '8px' }}>
                 <span style={{ color: '#475569', fontSize: '13.5px' }}>Warehouse Depot:</span>
-                <strong style={{ color: '#334155' }}>
-                  <MapPin size={12} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'middle' }} />
+                <strong style={{ color: '#334155', textAlign: 'right', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <MapPin size={12} style={{ flexShrink: 0 }} />
                   {product.warehouseStock || 'Central Warehouse'}
                 </strong>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '8px 16px', alignItems: 'center' }}>
                 <span style={{ color: '#475569', fontSize: '13.5px' }}>Barcode ID:</span>
-                <strong style={{ fontFamily: 'monospace', color: '#334155' }}>{product.barcode || 'N/A'}</strong>
+                <strong style={{ fontFamily: 'monospace', color: '#334155', textAlign: 'right' }}>{product.barcode || 'N/A'}</strong>
               </div>
             </div>
           </div>
@@ -247,26 +248,24 @@ export default function InventoryDetailModal({
             <h4 style={{ margin: '0 0 16px 0', fontSize: '13px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'flex', alignItems: 'center', gap: '6px', fontWeight: 700 }}>
               <DollarSign size={15} style={{ color: '#7c3aed' }} /> Pricing & Valuation
             </h4>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-              <div style={{ backgroundColor: '#f8fafc', padding: '10px 14px', borderRadius: '10px', border: '1px solid #f1f5f9' }}>
-                <div style={{ fontSize: '11px', color: '#64748b' }}>Purchase Rate</div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+              <div style={{ backgroundColor: '#f8fafc', padding: '10px 14px', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                <div style={{ fontSize: '11px', color: '#64748b', fontWeight: 500 }}>Purchase Rate</div>
                 <strong style={{ fontSize: '16px', color: '#0f172a' }}>₹{(product.purchasePrice || 0).toLocaleString()}</strong>
               </div>
-              <div style={{ backgroundColor: '#f5f3ff', padding: '10px 14px', borderRadius: '10px', border: '1px solid #ede9fe' }}>
-                <div style={{ fontSize: '11px', color: '#7c3aed' }}>Selling Rate</div>
+              <div style={{ backgroundColor: '#faf5ff', padding: '10px 14px', borderRadius: '10px', border: '1px solid #e9d5ff' }}>
+                <div style={{ fontSize: '11px', color: '#7c3aed', fontWeight: 500 }}>Selling Rate</div>
                 <strong style={{ fontSize: '16px', color: '#7c3aed' }}>₹{(product.sellingPrice || 0).toLocaleString()}</strong>
               </div>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginTop: '12px' }}>
-              <div style={{ backgroundColor: '#f0fdf4', padding: '8px 14px', borderRadius: '10px', border: '1px solid #dcfce7' }}>
-                <div style={{ fontSize: '10px', color: '#16a34a' }}>Wholesale Rate</div>
-                <strong style={{ fontSize: '14.5px', color: '#16a34a' }}>
+              <div style={{ backgroundColor: '#f0fdf4', padding: '10px 14px', borderRadius: '10px', border: '1px solid #bbf7d0' }}>
+                <div style={{ fontSize: '11px', color: '#16a34a', fontWeight: 500 }}>Wholesale Rate</div>
+                <strong style={{ fontSize: '16px', color: '#16a34a' }}>
                   {product.wholesalePrice > 0 ? `₹${(product.wholesalePrice).toLocaleString()}` : 'N/A'}
                 </strong>
               </div>
-              <div style={{ backgroundColor: '#faf5ff', padding: '8px 14px', borderRadius: '10px', border: '1px solid #f3e8ff' }}>
-                <div style={{ fontSize: '10px', color: '#9333ea' }}>MRP Rate</div>
-                <strong style={{ fontSize: '14.5px', color: '#9333ea' }}>₹{(product.mrp || 0).toLocaleString()}</strong>
+              <div style={{ backgroundColor: '#faf5ff', padding: '10px 14px', borderRadius: '10px', border: '1px solid #e9d5ff' }}>
+                <div style={{ fontSize: '11px', color: '#9333ea', fontWeight: 500 }}>MRP Rate</div>
+                <strong style={{ fontSize: '16px', color: '#9333ea' }}>₹{(product.mrp || 0).toLocaleString()}</strong>
               </div>
             </div>
           </div>
@@ -297,7 +296,7 @@ export default function InventoryDetailModal({
 
         {/* Real-time Inventory Stock Adjustments */}
         <div style={{ 
-          border: '1px solid #7c3aed', 
+          border: '1px solid #e9d5ff', 
           backgroundColor: '#faf5ff',
           borderRadius: '16px', 
           padding: '20px',
@@ -307,54 +306,58 @@ export default function InventoryDetailModal({
             <Activity size={15} /> Quick Inventory Stock Adjustment
           </h4>
           
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', alignItems: 'center' }}>
-            <div style={{ display: 'flex', gap: '10px', flex: 1 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '20px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '10px' }}>
               <button 
                 onClick={() => onAdjustStock(product, 10)} 
-                className="btn-secondary" 
                 style={{ 
                   flex: 1, 
-                  padding: '10px', 
-                  fontSize: '12px', 
+                  padding: '10px 14px', 
+                  fontSize: '12.5px', 
                   fontWeight: 700, 
                   backgroundColor: '#ffffff', 
-                  border: '1px solid #ddd6fe',
+                  border: '1px solid #d8b4fe',
                   borderRadius: '10px',
                   cursor: 'pointer',
                   color: '#7c3aed',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '4px'
+                  gap: '4px',
+                  transition: 'all 0.2s'
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f5f3ff'; e.currentTarget.style.borderColor = '#7c3aed'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.borderColor = '#d8b4fe'; }}
               >
                 <Plus size={14} /> Stock In (+10)
               </button>
               
               <button 
                 onClick={() => onAdjustStock(product, -10)} 
-                className="btn-secondary" 
                 style={{ 
                   flex: 1, 
-                  padding: '10px', 
-                  fontSize: '12px', 
+                  padding: '10px 14px', 
+                  fontSize: '12.5px', 
                   fontWeight: 700, 
                   backgroundColor: '#ffffff', 
-                  border: '1px solid #ddd6fe',
+                  border: '1px solid #d8b4fe',
                   borderRadius: '10px',
                   cursor: 'pointer',
                   color: '#7c3aed',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  gap: '4px'
+                  gap: '4px',
+                  transition: 'all 0.2s'
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f5f3ff'; e.currentTarget.style.borderColor = '#7c3aed'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffffff'; e.currentTarget.style.borderColor = '#d8b4fe'; }}
               >
                 <Minus size={14} /> Stock Out (-10)
               </button>
             </div>
 
-            <div style={{ display: 'flex', gap: '8px', flex: '1.2', minWidth: '220px' }}>
+            <div style={{ display: 'flex', gap: '8px' }}>
               <input 
                 type="number"
                 placeholder="Custom quantity..."
@@ -364,38 +367,48 @@ export default function InventoryDetailModal({
                   flex: 1,
                   padding: '10px 12px',
                   fontSize: '13px',
-                  border: '1px solid #ddd6fe',
+                  border: '1px solid #d8b4fe',
                   borderRadius: '10px',
-                  outline: 'none'
+                  outline: 'none',
+                  backgroundColor: '#ffffff',
+                  transition: 'all 0.2s'
                 }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = '#7c3aed'; e.currentTarget.style.boxShadow = '0 0 0 2px rgba(124, 58, 237, 0.15)'; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = '#d8b4fe'; e.currentTarget.style.boxShadow = 'none'; }}
               />
               <button 
                 onClick={() => handleCustomAdjustment(true)}
                 style={{
-                  padding: '10px 14px',
+                  padding: '10px 16px',
                   backgroundColor: '#7c3aed',
                   color: '#ffffff',
                   border: 'none',
                   borderRadius: '10px',
-                  fontWeight: 600,
-                  fontSize: '12px',
-                  cursor: 'pointer'
+                  fontWeight: 700,
+                  fontSize: '12.5px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#6b21a8'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#7c3aed'; }}
               >
                 Add
               </button>
               <button 
                 onClick={() => handleCustomAdjustment(false)}
                 style={{
-                  padding: '10px 14px',
-                  backgroundColor: '#6b7280',
+                  padding: '10px 16px',
+                  backgroundColor: '#ef4444',
                   color: '#ffffff',
                   border: 'none',
                   borderRadius: '10px',
-                  fontWeight: 600,
-                  fontSize: '12px',
-                  cursor: 'pointer'
+                  fontWeight: 700,
+                  fontSize: '12.5px',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s'
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#dc2626'; }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ef4444'; }}
               >
                 Reduce
               </button>
@@ -431,6 +444,8 @@ export default function InventoryDetailModal({
                 cursor: 'pointer',
                 transition: 'all 0.2s'
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#f9fafb'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#ffffff'; }}
             >
               <Edit size={14} /> Edit Ledger Details
             </button>
@@ -454,6 +469,8 @@ export default function InventoryDetailModal({
                 cursor: 'pointer',
                 transition: 'all 0.2s'
               }}
+              onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#fee2e2'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#fef2f2'; }}
             >
               <Trash2 size={14} /> Remove Item
             </button>
@@ -472,6 +489,8 @@ export default function InventoryDetailModal({
               cursor: 'pointer',
               transition: 'all 0.2s'
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = '#0f172a'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = '#1e293b'; }}
           >
             Close
           </button>
