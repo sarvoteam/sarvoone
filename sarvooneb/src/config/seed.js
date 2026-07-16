@@ -118,6 +118,27 @@ export async function ensureDefaultData() {
       unitMap[unitItem.name] = unit.id;
     }
 
+    // 6.5. Ensure Suppliers exist
+    const suppliersList = [
+      { name: 'Astra Distributors', phone: '9876543220', email: 'orders@astradist.com', address: 'BKC Phase 1, Mumbai', gstin: '27DDDDD4444D4Z4' },
+      { name: 'MedLife Wholesalers', phone: '9922883311', email: 'sales@medlife.com', address: 'Kothrud Industrial, Pune', gstin: '27EEEEE5555E5Z5' },
+      { name: 'Apex Electronics Corp', phone: '9822001155', email: 'info@apexelectronics.com', address: 'Connaught Place Area, Delhi', gstin: '27FFFFF6666F6Z6' }
+    ];
+    for (const sup of suppliersList) {
+      let existingSup = await prisma.supplier.findFirst({
+        where: { name: sup.name, branchId: defaultBranch.id }
+      });
+      if (!existingSup) {
+        await prisma.supplier.create({
+          data: {
+            ...sup,
+            branchId: defaultBranch.id
+          }
+        });
+        console.log(`[Seed] Created supplier: ${sup.name}`);
+      }
+    }
+
     // 7. Ensure default products exist
     const productCount = await prisma.product.count();
     if (productCount === 0) {
@@ -188,6 +209,110 @@ export async function ensureDefaultData() {
       console.log('[Seed] Seeded default products successfully!');
     } else {
       console.log(`[Seed] Database already contains ${productCount} products. Skipping product seed.`);
+    }
+
+    // 8. Ensure default employees and attendance exist
+    const employeeCount = await prisma.employee.count();
+    if (employeeCount === 0) {
+      const defaultBranch = await prisma.branch.findFirst();
+      if (defaultBranch) {
+        // Emily Lynch
+        const emily = await prisma.employee.create({
+          data: {
+            branchId: defaultBranch.id,
+            name: 'Emily Lynch',
+            role: 'Production Line Expert',
+            email: 'e.lynch@gmail.com',
+            salary: 3800
+          }
+        });
+
+        // Alexander Medvedev
+        const alex = await prisma.employee.create({
+          data: {
+            branchId: defaultBranch.id,
+            name: 'Alexander Medvedev',
+            role: 'Sales Man, Accountant',
+            email: 'alex.med@gmail.com',
+            salary: 3200
+          }
+        });
+
+        // Marques Brownley
+        const marques = await prisma.employee.create({
+          data: {
+            branchId: defaultBranch.id,
+            name: 'Marques Brownley',
+            role: 'Data Analyst',
+            email: 'mkbhd@gmail.com',
+            salary: 4500
+          }
+        });
+
+        // Anastasia Golovko
+        const anastasia = await prisma.employee.create({
+          data: {
+            branchId: defaultBranch.id,
+            name: 'Anastasia Golovko',
+            role: 'Stock Accountant',
+            email: 'anastasia@outlook.com',
+            salary: 2900
+          }
+        });
+
+        // Attendance seeding for today
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        // Emily: Present, 09:00 AM
+        const emilyClockIn = new Date();
+        emilyClockIn.setHours(9, 0, 0, 0);
+        await prisma.attendance.create({
+          data: {
+            employeeId: emily.id,
+            date: today,
+            status: 'PRESENT',
+            clockIn: emilyClockIn
+          }
+        });
+
+        // Alexander: Present, 08:45 AM
+        const alexClockIn = new Date();
+        alexClockIn.setHours(8, 45, 0, 0);
+        await prisma.attendance.create({
+          data: {
+            employeeId: alex.id,
+            date: today,
+            status: 'PRESENT',
+            clockIn: alexClockIn
+          }
+        });
+
+        // Marques: Absent
+        await prisma.attendance.create({
+          data: {
+            employeeId: marques.id,
+            date: today,
+            status: 'ABSENT'
+          }
+        });
+
+        // Anastasia: Present, 09:15 AM
+        const anastasiaClockIn = new Date();
+        anastasiaClockIn.setHours(9, 15, 0, 0);
+        await prisma.attendance.create({
+          data: {
+            employeeId: anastasia.id,
+            date: today,
+            status: 'PRESENT',
+            clockIn: anastasiaClockIn
+          }
+        });
+
+        console.log('[Seed] Seeded default employees and attendance successfully!');
+      }
+    } else {
+      console.log(`[Seed] Database already contains ${employeeCount} employees. Skipping employee seed.`);
     }
 
   } catch (err) {

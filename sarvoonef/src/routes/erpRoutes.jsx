@@ -5,7 +5,7 @@ import GeneralLedger from '../features/erp/accounting/pages/GeneralLedger';
 import JournalEntries from '../features/erp/accounting/pages/JournalEntries';
 import POSBillingPage from '../features/erp/sales/pages/POSBillingPage';
 import ProductManagement from '../features/erp/products/ProductManagement';
-import PurchaseManagement from '../features/erp/purchases/PurchaseManagement';
+import PurchaseManagement from '../features/erp/purchases/pages/PurchaseManagement';
 import SalesManagementPage from '../features/erp/sales/pages/SalesManagementPage';
 import Taxation from '../features/erp/accounting/Taxation';
 import Reports from '../features/erp/reports/Reports';
