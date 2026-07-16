@@ -7,7 +7,23 @@ export class PaymentsRepository {
   }
 
   async create(data) {
-    return this.model.create({ data });
+    let activeBranchId = data.branchId;
+    if (!activeBranchId) {
+      const defaultBranch = await this.db.branch.findFirst();
+      if (defaultBranch) {
+        activeBranchId = defaultBranch.id;
+      } else {
+        throw new Error("No branch found in the database. Please create a branch first.");
+      }
+    }
+    
+    const prismaData = {
+      ...data,
+      branchId: activeBranchId,
+      amount: Number(data.amount)
+    };
+
+    return this.model.create({ data: prismaData });
   }
 
   async findMany(filters = {}) {
