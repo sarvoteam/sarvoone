@@ -18,15 +18,20 @@ export function GuestGuard({ children }) {
 
   if (isAuthenticated) {
     let role = '';
+    let businessName = '';
     try {
       const user = JSON.parse(sessionStorage.getItem('sarvo_user') || '{}');
       role = user.role;
+      businessName = user.businessName || '';
     } catch (e) {}
 
     if (role === 'SUPER_ADMIN' || role === 'Super Admin') {
       return <Navigate to="/superadmin/analytics" replace />;
     }
-    return <Navigate to="/dashboard" replace />;
+
+    const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    const businessSlug = businessName ? slugify(businessName) : 'dashboard';
+    return <Navigate to={`/${businessSlug}/dashboard`} replace />;
   }
 
   return children;

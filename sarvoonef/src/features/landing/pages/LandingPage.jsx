@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { 
   Package, 
   TrendingUp, 
@@ -13,12 +13,16 @@ import {
   Database, 
   Zap, 
   Layers, 
-  Users 
+  Users,
+  Search,
+  Loader2
 } from 'lucide-react';
+import api from '../../../shared/api/axios';
 import './LandingPage.css';
 
 export default function LandingPage() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userRole, setUserRole] = useState('');
   const [contactName, setContactName] = useState('');
@@ -37,11 +41,41 @@ export default function LandingPage() {
     }
   }, []);
 
+  const scrollToSection = (id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    if (location.state && location.state.scrollTo) {
+      // Small timeout to ensure the DOM has fully rendered before scrolling
+      const timer = setTimeout(() => {
+        scrollToSection(location.state.scrollTo);
+        // Clear location state so that it doesn't trigger scroll on refresh
+        window.history.replaceState({}, document.title);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state]);
+
   const handleDashboardRedirect = () => {
     if (userRole === 'SUPER_ADMIN' || userRole === 'Super Admin') {
       navigate('/superadmin/analytics');
     } else {
-      navigate('/dashboard');
+      const userStr = sessionStorage.getItem('sarvo_user');
+      let businessSlug = 'dashboard';
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+          if (user.businessName) {
+            businessSlug = slugify(user.businessName);
+          }
+        } catch (e) {}
+      }
+      navigate(`/${businessSlug}/dashboard`);
     }
   };
 
@@ -68,10 +102,11 @@ export default function LandingPage() {
           </div>
 
           <nav className="nav-links">
-            <a href="#about">About</a>
-            <a href="#features">Features</a>
-            <a href="#pricing">Pricing</a>
-            <a href="#contact">Contact</a>
+            <span className="nav-link-btn" onClick={() => navigate('/')}>Products</span>
+            <span className="nav-link-btn" onClick={() => scrollToSection('about')}>About</span>
+            <span className="nav-link-btn" onClick={() => scrollToSection('features')}>Features</span>
+            <span className="nav-link-btn" onClick={() => scrollToSection('pricing')}>Pricing</span>
+            <span className="nav-link-btn" onClick={() => scrollToSection('contact')}>Contact</span>
           </nav>
 
           <div className="nav-actions">
@@ -111,9 +146,9 @@ export default function LandingPage() {
                   <button onClick={() => navigate('/auth/register')} className="btn-solid-large">
                     Get Started Free <ArrowRight size={18} />
                   </button>
-                  <a href="#features" className="btn-outline-large">
-                    Explore Features
-                  </a>
+                  <button onClick={() => navigate('/')} className="btn-outline-large">
+                    Explore Products
+                  </button>
                 </>
               )}
             </div>

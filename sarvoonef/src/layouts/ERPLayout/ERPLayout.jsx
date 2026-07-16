@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation, useParams } from 'react-router-dom';
 import { 
   ChevronDown, 
   ChevronRight, 
@@ -31,7 +31,16 @@ import './ERPLayout.css';
 export default function ERPLayout() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { businessSlug } = useParams();
   const [isCollapsed, setIsCollapsed] = useState(false);
+
+  const getPath = (route) => {
+    return `/${businessSlug || 'dashboard'}/${route}`;
+  };
+
+  const isActive = (route) => {
+    return location.pathname === getPath(route);
+  };
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const profileMenuRef = useRef(null);
 
@@ -114,8 +123,8 @@ export default function ERPLayout() {
         {/* Sidebar Menu Items */}
         <nav className="sidebar-menu">
           <div 
-            className={`menu-item ${location.pathname === '/dashboard' ? 'active' : ''}`}
-            onClick={() => navigate('/dashboard')}
+            className={`menu-item ${isActive('dashboard') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('dashboard'))}
           >
             <div className="menu-item-left">
               <LayoutDashboard className="menu-item-icon" size={18} />
@@ -125,8 +134,8 @@ export default function ERPLayout() {
 
           {/* Product Catalog Standalone */}
           <div 
-            className={`menu-item ${location.pathname === '/products' ? 'active' : ''}`}
-            onClick={() => navigate('/products')}
+            className={`menu-item ${isActive('products') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('products'))}
           >
             <div className="menu-item-left">
               <Database className="menu-item-icon" size={18} />
@@ -136,8 +145,8 @@ export default function ERPLayout() {
 
           {/* Inventory Items Standalone */}
           <div 
-            className={`menu-item ${location.pathname === '/inventory' ? 'active' : ''}`}
-            onClick={() => navigate('/inventory')}
+            className={`menu-item ${isActive('inventory') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('inventory'))}
           >
             <div className="menu-item-left">
               <Package className="menu-item-icon" size={18} />
@@ -147,8 +156,8 @@ export default function ERPLayout() {
 
           {/* POS Billing Terminal Standalone */}
           <div 
-            className={`menu-item ${location.pathname === '/pos' ? 'active' : ''}`}
-            onClick={() => navigate('/pos')}
+            className={`menu-item ${isActive('pos') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('pos'))}
           >
             <div className="menu-item-left">
               <ShoppingCart className="menu-item-icon" size={18} />
@@ -158,8 +167,8 @@ export default function ERPLayout() {
 
           {/* Sales Invoices Standalone */}
           <div 
-            className={`menu-item ${location.pathname === '/sales' ? 'active' : ''}`}
-            onClick={() => navigate('/sales')}
+            className={`menu-item ${isActive('sales') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('sales'))}
           >
             <div className="menu-item-left">
               <FileText className="menu-item-icon" size={18} />
@@ -169,8 +178,8 @@ export default function ERPLayout() {
 
           {/* Purchase Orders Standalone */}
           <div 
-            className={`menu-item ${location.pathname === '/purchases' ? 'active' : ''}`}
-            onClick={() => navigate('/purchases')}
+            className={`menu-item ${isActive('purchases') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('purchases'))}
           >
             <div className="menu-item-left">
               <TrendingUp className="menu-item-icon" size={18} />
@@ -180,8 +189,8 @@ export default function ERPLayout() {
 
           {/* Standalone navigation links */}
           <div 
-            className={`menu-item ${location.pathname === '/employees' ? 'active' : ''}`}
-            onClick={() => navigate('/employees')}
+            className={`menu-item ${isActive('employees') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('employees'))}
           >
             <div className="menu-item-left">
               <ShieldCheck className="menu-item-icon" size={18} />
@@ -190,8 +199,8 @@ export default function ERPLayout() {
           </div>
 
           <div 
-            className={`menu-item ${location.pathname === '/reports' ? 'active' : ''}`}
-            onClick={() => navigate('/reports')}
+            className={`menu-item ${isActive('reports') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('reports'))}
           >
             <div className="menu-item-left">
               <ArrowLeftRight className="menu-item-icon" size={18} />
@@ -211,22 +220,22 @@ export default function ERPLayout() {
             {!isCollapsed && expandedMenus.accounting && (
               <div className="menu-submenu">
                 <div 
-                  className={`submenu-item ${location.pathname === '/ledger' ? 'active' : ''}`}
-                  onClick={() => navigate('/ledger')}
+                  className={`submenu-item ${isActive('ledger') ? 'active' : ''}`}
+                  onClick={() => navigate(getPath('ledger'))}
                   style={{ cursor: 'pointer' }}
                 >
                   General Ledger
                 </div>
                 <div 
-                  className={`submenu-item ${location.pathname === '/journal' ? 'active' : ''}`}
-                  onClick={() => navigate('/journal')}
+                  className={`submenu-item ${isActive('journal') ? 'active' : ''}`}
+                  onClick={() => navigate(getPath('journal'))}
                   style={{ cursor: 'pointer' }}
                 >
                   Journal Entries
                 </div>
                 <div 
-                  className={`submenu-item ${location.pathname === '/taxation' ? 'active' : ''}`}
-                  onClick={() => navigate('/taxation')}
+                  className={`submenu-item ${isActive('taxation') ? 'active' : ''}`}
+                  onClick={() => navigate(getPath('taxation'))}
                   style={{ cursor: 'pointer' }}
                 >
                   GST & Taxation
@@ -235,11 +244,9 @@ export default function ERPLayout() {
             )}
           </div>
 
-
-
           <div 
-            className={`menu-item ${location.pathname === '/branches' ? 'active' : ''}`}
-            onClick={() => navigate('/branches')}
+            className={`menu-item ${isActive('branches') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('branches'))}
           >
             <div className="menu-item-left">
               <RefreshCw className="menu-item-icon" size={18} />
@@ -248,8 +255,8 @@ export default function ERPLayout() {
           </div>
 
           <div 
-            className={`menu-item ${location.pathname === '/settings' ? 'active' : ''}`}
-            onClick={() => navigate('/settings')}
+            className={`menu-item ${isActive('settings') ? 'active' : ''}`}
+            onClick={() => navigate(getPath('settings'))}
           >
             <div className="menu-item-left">
               <Settings className="menu-item-icon" size={18} />
@@ -396,7 +403,7 @@ export default function ERPLayout() {
                 {/* Actions Links */}
                 <div className="profile-dropdown-actions">
                   <div 
-                    onClick={() => { setShowProfileMenu(false); navigate('/my-account'); }}
+                    onClick={() => { setShowProfileMenu(false); navigate(getPath('my-account')); }}
                     className="profile-dropdown-item"
                   >
                     <User size={15} />
@@ -404,7 +411,7 @@ export default function ERPLayout() {
                   </div>
  
                   <div 
-                    onClick={() => { setShowProfileMenu(false); navigate('/settings'); }}
+                    onClick={() => { setShowProfileMenu(false); navigate(getPath('settings')); }}
                     className="profile-dropdown-item"
                   >
                     <Settings size={15} />
