@@ -12,9 +12,10 @@ import {
   Package,
   CheckCircle,
   XCircle,
-  Tag
+  Tag,
+  Store
 } from 'lucide-react';
-import api from '../../../shared/api/axios';
+import api from '../../../../shared/api/axios';
 import './PublicShopPage.css';
 
 export default function PublicShopPage() {
@@ -201,45 +202,34 @@ export default function PublicShopPage() {
               const isLowStock = p.currentStock !== undefined && p.currentStock <= 0;
               return (
                 <div key={p.id} className="product-shop-card">
+                  <div className="product-card-header">
+                    <Store size={12} className="header-store-icon" />
+                    <span className="header-store-name">{shopInfo.name}</span>
+                  </div>
+
                   <div className="card-image-box">
-                    <span className="card-category-badge">
-                      <Tag size={12} /> {p.category || 'General'}
-                    </span>
                     <div className="placeholder-image">
                       {p.name.charAt(0).toUpperCase()}
                     </div>
                   </div>
 
                   <div className="product-card-body">
-                    {p.brand && <span className="product-brand">{p.brand}</span>}
                     <h3 className="product-name" title={p.name}>{p.name}</h3>
-                    <span className="product-sku">SKU: {p.sku}</span>
                     
-                    <div className="product-stock-status">
-                      {isLowStock ? (
-                        <span className="status-badge absent">
-                          <XCircle size={14} /> Out of Stock
-                        </span>
-                      ) : (
-                        <span className="status-badge present">
-                          <CheckCircle size={14} /> In Stock ({p.currentStock} {p.unit || 'pcs'})
-                        </span>
+                    <div className="product-price-section">
+                      <span className="selling-price">₹{p.sellingPrice}</span>
+                      {!!p.mrp && p.mrp > p.sellingPrice && (
+                        <span className="mrp-price">₹{p.mrp}</span>
                       )}
                     </div>
 
-                    <div className="product-card-footer">
-                      <div className="price-tag">
-                        <span className="mrp-price">₹{p.mrp}</span>
-                        <span className="selling-price">₹{p.sellingPrice}</span>
-                      </div>
-                      <button 
-                        onClick={() => handleAddToCart(p)}
-                        className={`add-to-cart-btn ${isLowStock ? 'disabled' : ''}`}
-                        disabled={isLowStock}
-                      >
-                        Buy Now
-                      </button>
-                    </div>
+                    <button 
+                      onClick={() => handleAddToCart(p)}
+                      className={`add-to-cart-btn ${isLowStock ? 'disabled' : ''}`}
+                      disabled={isLowStock}
+                    >
+                      {isLowStock ? 'Out of Stock' : 'Buy Now'}
+                    </button>
                   </div>
                 </div>
               );
