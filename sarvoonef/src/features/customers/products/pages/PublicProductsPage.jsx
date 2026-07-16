@@ -15,7 +15,7 @@ import {
   Tag,
   Store
 } from 'lucide-react';
-import api from '../../../shared/api/axios';
+import api from '../../../../shared/api/axios';
 import './PublicProductsPage.css';
 
 export default function PublicProductsPage() {
@@ -85,29 +85,6 @@ export default function PublicProductsPage() {
     navigate('/about', { state: { scrollTo: sectionId } });
   };
 
-  if (loading) {
-    return (
-      <div className="products-loading-container">
-        <Loader2 className="animate-spin" size={48} />
-        <h2>Entering Products Marketplace...</h2>
-        <p>Retrieving product directories and live merchant stocks.</p>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="products-error-container">
-        <AlertCircle size={64} />
-        <h2>Directory Unavailable</h2>
-        <p>{error}</p>
-        <button onClick={() => navigate('/')} className="btn-back-home">
-          <ArrowLeft size={16} /> Back to Portal
-        </button>
-      </div>
-    );
-  }
-
   return (
     <div className="public-products-layout">
       {/* Standalone Products Navbar */}
@@ -137,8 +114,23 @@ export default function PublicProductsPage() {
           </div>
         </div>
       </header>
-      {/* Product Catalog Controls & Search */}
-      <main className="products-catalog-container">
+
+      {loading ? (
+        <div className="products-inline-loading-container">
+          <Loader2 className="animate-spin" size={32} />
+          <p>Retrieving product directories and live merchant stocks...</p>
+        </div>
+      ) : error ? (
+        <div className="products-error-container-inline">
+          <AlertCircle size={48} />
+          <h2>Directory Unavailable</h2>
+          <p>{error}</p>
+          <button onClick={() => window.location.reload()} className="btn-back-home">
+            <ArrowLeft size={16} /> Retry
+          </button>
+        </div>
+      ) : (
+        <main className="products-catalog-container">
         <div className="catalog-header">
           <p>Showing {filteredProducts.length} of {allProducts.length} active listings</p>
         </div>
@@ -180,48 +172,38 @@ export default function PublicProductsPage() {
               const isLowStock = p.currentStock !== undefined && p.currentStock <= 0;
               return (
                 <div key={p.id} className="product-global-card">
+                  <div 
+                    className="product-card-header" 
+                    onClick={() => navigate(`/${p.storeSlug}`)} 
+                    title={`Visit ${p.storeName}`}
+                  >
+                    <Store size={12} className="header-store-icon" />
+                    <span className="header-store-name">{p.storeName}</span>
+                  </div>
+
                   <div className="card-image-box">
-                    <span className="card-category-badge">
-                      <Tag size={12} /> {p.category || 'General'}
-                    </span>
-                    <span className="card-store-badge" onClick={() => navigate(`/${p.storeSlug}`)}>
-                      <Store size={12} /> {p.storeName}
-                    </span>
                     <div className="placeholder-image">
                       {p.name.charAt(0).toUpperCase()}
                     </div>
                   </div>
 
                   <div className="product-card-body">
-                    {p.brand && <span className="product-brand">{p.brand}</span>}
                     <h3 className="product-name" title={p.name}>{p.name}</h3>
-                    <span className="product-sku">SKU: {p.sku}</span>
                     
-                    <div className="product-stock-status">
-                      {isLowStock ? (
-                        <span className="status-badge absent">
-                          <XCircle size={14} /> Out of Stock
-                        </span>
-                      ) : (
-                        <span className="status-badge present">
-                          <CheckCircle size={14} /> In Stock ({p.currentStock} {p.unit || 'pcs'})
-                        </span>
+                    <div className="product-price-section">
+                      <span className="selling-price">₹{p.sellingPrice}</span>
+                      {!!p.mrp && p.mrp > p.sellingPrice && (
+                        <span className="mrp-price">₹{p.mrp}</span>
                       )}
                     </div>
 
-                    <div className="product-card-footer">
-                      <div className="price-tag">
-                        <span className="mrp-price">₹{p.mrp}</span>
-                        <span className="selling-price">₹{p.sellingPrice}</span>
-                      </div>
-                      <button 
-                        onClick={() => handleAddToCart(p)}
-                        className={`add-to-cart-btn ${isLowStock ? 'disabled' : ''}`}
-                        disabled={isLowStock}
-                      >
-                        Buy Now
-                      </button>
-                    </div>
+                    <button 
+                      onClick={() => handleAddToCart(p)}
+                      className={`add-to-cart-btn ${isLowStock ? 'disabled' : ''}`}
+                      disabled={isLowStock}
+                    >
+                      {isLowStock ? 'Out of Stock' : 'Buy Now'}
+                    </button>
                   </div>
                 </div>
               );
@@ -229,6 +211,7 @@ export default function PublicProductsPage() {
           </div>
         )}
       </main>
+    )}
 
       {/* Footer */}
       <footer className="products-footer">

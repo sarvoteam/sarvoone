@@ -10,8 +10,8 @@ import { AuthGuard, GuestGuard } from '../features/auth/components/AuthGuard';
 import { appRoutes, superAdminRoutes } from '../routes';
 import SuperAdminLayout from '../layouts/SuperAdminLayout/SuperAdminLayout';
 
-import PublicShopPage from '../features/shop/pages/PublicShopPage';
-import PublicProductsPage from '../features/shop/pages/PublicProductsPage';
+import PublicShopPage from '../features/customers/stores/pages/PublicShopPage';
+import PublicProductsPage from '../features/customers/products/pages/PublicProductsPage';
 
 export const router = createBrowserRouter([
   {

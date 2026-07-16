@@ -25,7 +25,7 @@
   left: 0;
   right: 0;
   height: 72px;
-  background: linear-gradient(135deg, rgba(147, 51, 234, 0.95) 0%, rgba(109, 40, 217, 0.95) 60%, rgba(90, 23, 190, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(217, 70, 239, 0.95) 0%, rgba(168, 85, 247, 0.95) 50%, rgba(107, 33, 168, 0.95) 100%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
@@ -81,19 +81,8 @@
 
 .nav-links {
   display: flex;
+  align-items: center;
   gap: 32px;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: rgba(255, 255, 255, 0.85);
-  font-weight: 600;
-  font-size: 14.5px;
-  transition: all 0.2s ease;
-}
-
-.nav-links a:hover {
-  color: #ffffff;
 }
 
 .nav-actions {
@@ -865,11 +854,19 @@
   font-weight: 600;
   font-size: 14.5px;
   cursor: pointer;
+  padding: 6px 0;
+  border-bottom: 2px solid transparent;
   transition: all 0.2s ease;
+  line-height: 1;
 }
 
 .nav-link-btn:hover {
   color: #ffffff;
+}
+
+.nav-link-btn.active {
+  color: #ffffff;
+  border-bottom: 2px solid #ffffff;
 }
 
 .promo-badge-purple {
