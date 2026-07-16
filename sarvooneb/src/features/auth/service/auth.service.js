@@ -46,13 +46,18 @@ export class AuthService {
       primaryRole = rolesList[0];
     }
 
+    const business = await this.repository.db.business.findFirst({
+      where: { email: user.email }
+    });
+
     return {
       token: `mock_jwt_token_for_${user.id}_${Date.now()}`,
       user: {
         id: user.id,
         email: user.email,
         name: user.name,
-        role: primaryRole
+        role: primaryRole,
+        businessName: business ? business.name : null
       }
     };
   }

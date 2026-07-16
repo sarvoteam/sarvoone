@@ -17,7 +17,10 @@ import expensesRouter from '../features/erp/expenses/expenses.module.js';
 import employeesRouter from '../features/erp/employees/employees.module.js';
 import attendanceRouter from '../features/erp/attendance/attendance.module.js';
 import dashboardRouter from '../features/erp/dashboard/dashboard.module.js';
+import branchesRouter from '../features/erp/branches/branches.module.js';
 import notificationsRouter from '../features/notifications/notifications.module.js';
+
+import prisma from '../config/prisma.js';
 
 const router = express.Router();
 
@@ -40,7 +43,120 @@ router.use('/erp/expenses', expensesRouter);
 router.use('/erp/employees', employeesRouter);
 router.use('/erp/attendance', attendanceRouter);
 router.use('/erp/dashboard', dashboardRouter);
+router.use('/erp/branches', branchesRouter);
 router.use('/notifications', notificationsRouter);
 
+// Public Shop API Endpoints
+router.get('/public', async (req, res, next) => {
+  try {
+    const businesses = await prisma.business.findMany({
+      include: {
+        branches: {
+          include: {
+            products: {
+              include: {
+                category: true,
+                unit: true,
+                brand: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const data = businesses.map(b => {
+      const products = b.branches.flatMap(br => br.products.map(p => ({
+        id: p.id,
+        name: p.name,
+        sku: p.sku,
+        category: p.category ? p.category.name : 'General',
+        unit: p.unit ? p.unit.name : 'piece',
+        brand: p.brand ? p.brand.name : '',
+        sellingPrice: p.sellingPrice,
+        mrp: p.mrp,
+        currentStock: p.currentStock
+      })));
+
+      return {
+        id: b.id,
+        name: b.name,
+        email: b.email,
+        phone: b.phone,
+        address: b.address,
+        ownerName: b.ownerName,
+        category: b.category,
+        products: products
+      };
+    });
+
+    return res.status(200).json({
+      success: true,
+      data
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get('/public/:businessSlug', async (req, res, next) => {
+  try {
+    const { businessSlug } = req.params;
+    const businesses = await prisma.business.findMany({
+      include: {
+        branches: {
+          include: {
+            products: {
+              include: {
+                category: true,
+                unit: true,
+                brand: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+    const business = businesses.find(b => slugify(b.name) === businessSlug);
+
+    if (!business) {
+      return res.status(404).json({ success: false, message: 'Business not found' });
+    }
+
+    const products = business.branches.flatMap(br => br.products.map(p => ({
+      id: p.id,
+      name: p.name,
+      sku: p.sku,
+      category: p.category ? p.category.name : 'General',
+      unit: p.unit ? p.unit.name : 'piece',
+      brand: p.brand ? p.brand.name : '',
+      sellingPrice: p.sellingPrice,
+      mrp: p.mrp,
+      currentStock: p.currentStock
+    })));
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        business: {
+          id: business.id,
+          name: business.name,
+          email: business.email,
+          phone: business.phone,
+          address: business.address,
+          ownerName: business.ownerName,
+          category: business.category
+        },
+        products
+      }
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
 export default router;
+
 

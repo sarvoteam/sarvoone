@@ -190,3 +190,31 @@
   align-items: center;
   gap: 8px;
 }
+
+.auth-input-password {
+  padding-right: 38px;
+}
+
+.auth-input-password-toggle {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  margin: 0;
+  transition: color 0.2s ease;
+}
+
+.auth-input-password-toggle:hover {
+  color: #7c3aed;
+}
+
+.auth-input-password-toggle:focus {
+  outline: none;
+}
+

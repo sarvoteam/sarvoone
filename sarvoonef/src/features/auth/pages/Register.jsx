@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, User, Briefcase, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, Lock, User, Briefcase, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 
 export default function Register() {
   const navigate = useNavigate();
@@ -8,6 +8,7 @@ export default function Register() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -29,11 +30,13 @@ export default function Register() {
       sessionStorage.setItem('sarvo_user', JSON.stringify({
         name: fullName,
         email: email,
-        role: 'Super Admin',
+        role: 'BUSINESS_OWNER',
         businessName: businessName,
         avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=120'
       }));
-      navigate('/dashboard');
+      const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      const businessSlug = businessName ? slugify(businessName) : 'dashboard';
+      navigate(`/${businessSlug}/dashboard`);
     }, 1000);
   };
 
@@ -96,13 +99,22 @@ export default function Register() {
         <div className="auth-input-wrapper">
           <Lock className="auth-input-icon" size={16} />
           <input
-            type="password"
-            className="auth-input"
+            type={showPassword ? 'text' : 'password'}
+            className="auth-input auth-input-password"
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
           />
+          <button
+            type="button"
+            className="auth-input-password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+            disabled={loading}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
         </div>
       </div>
 

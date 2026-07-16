@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Mail, Lock, AlertCircle, Loader2 } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react';
 import api from '../../../shared/api/axios';
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -35,7 +36,9 @@ export default function Login() {
         if (user.role === 'SUPER_ADMIN' || user.role === 'Super Admin') {
           navigate('/superadmin/analytics');
         } else {
-          navigate('/dashboard');
+          const slugify = (text) => text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+          const businessSlug = user.businessName ? slugify(user.businessName) : 'dashboard';
+          navigate(`/${businessSlug}/dashboard`);
         }
       })
       .catch((err) => {
@@ -73,13 +76,22 @@ export default function Login() {
         <div className="auth-input-wrapper">
           <Lock className="auth-input-icon" size={16} />
           <input
-            type="password"
-            className="auth-input"
+            type={showPassword ? 'text' : 'password'}
+            className="auth-input auth-input-password"
             placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             disabled={loading}
           />
+          <button
+            type="button"
+            className="auth-input-password-toggle"
+            onClick={() => setShowPassword(!showPassword)}
+            disabled={loading}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
         </div>
       </div>
 
