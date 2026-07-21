@@ -97,7 +97,6 @@ export default function LandingPage() {
       <header className="landing-navbar">
         <div className="navbar-container">
           <div className="landing-logo" onClick={() => navigate('/')}>
-            <div className="logo-icon">S</div>
             <span className="brand-text">Sarvo One</span>
           </div>
 
