@@ -16,6 +16,7 @@ import {
   Store
 } from 'lucide-react';
 import api from '../../../../shared/api/axios';
+import { getPaletteStyles } from '../../../../shared/constants/palettes';
 import './PublicShopPage.css';
 
 export default function PublicShopPage() {
@@ -97,8 +98,10 @@ export default function PublicShopPage() {
     );
   }
 
+  const paletteStyles = getPaletteStyles(shopInfo.settings?.colorPalette || 'royal_violet');
+
   return (
-    <div className="public-shop-layout">
+    <div className="public-shop-layout" style={paletteStyles}>
       {/* Store Navbar */}
       <header className="shop-navbar">
         <div className="shop-navbar-container">

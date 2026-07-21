@@ -16,6 +16,7 @@ import {
   Store
 } from 'lucide-react';
 import api from '../../../../shared/api/axios';
+import marketplaceHero from '../../../../assets/images/marketplace_hero.png';
 import './PublicProductsPage.css';
 
 export default function PublicProductsPage() {
@@ -33,6 +34,13 @@ export default function PublicProductsPage() {
   // Demo purchase modal
   const [showDemoModal, setShowDemoModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  const handleExploreClick = () => {
+    const el = document.getElementById('products-directory-section');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -91,7 +99,6 @@ export default function PublicProductsPage() {
       <header className="products-navbar">
         <div className="products-navbar-container">
           <div className="products-navbar-brand" onClick={() => navigate('/')}>
-            <div className="logo-icon-p">S</div>
             <span className="logo-text-p">Sarvo One</span>
           </div>
 
@@ -130,12 +137,81 @@ export default function PublicProductsPage() {
           </button>
         </div>
       ) : (
-        <main className="products-catalog-container">
-        <div className="catalog-header">
-          <p>Showing {filteredProducts.length} of {allProducts.length} active listings</p>
-        </div>
+        <>
+          {/* Marketplace Hero Banner */}
+          <div className="marketplace-hero-banner">
+            <div className="bg-circle bg-circle-1"></div>
+            <div className="bg-circle bg-circle-2"></div>
+            
+            <div className="hero-banner-container">
+              <div className="hero-banner-content">
+                <div className="hero-banner-left">
+                  <span className="badge-local">
+                    <span className="sparkle">✨</span> India's Local Business Marketplace
+                  </span>
+                  <h1 className="hero-banner-title">
+                    Discover <span className="text-handwritten">Local</span> Businesses. <br />
+                    Shop with <span className="text-highlight">Confidence.</span>
+                  </h1>
 
-        <div className="catalog-filters-bar">
+                  <div className="hero-feature-chips">
+                    <span className="chip"><span className="check">✓</span> Verified Businesses</span>
+                    <span className="chip"><span className="check">✓</span> Multiple Categories</span>
+                    <span className="chip"><span className="check">✓</span> Direct Store Connection</span>
+                    <span className="chip"><span className="check">✓</span> Trusted Marketplace</span>
+                  </div>
+                  
+                  <div className="hero-cta-section">
+                    <button className="btn-explore-cta" onClick={handleExploreClick}>
+                      Explore Marketplace
+                    </button>
+                  </div>
+
+                  <div className="hero-stats-row">
+                    <div className="stat-card">
+                      <span className="stat-sticker sticker-purple"><Store size={13} /></span>
+                      <div className="stat-info">
+                        <span className="stat-value font-ultra">500+</span>
+                        <span className="stat-label font-wide">Businesses</span>
+                      </div>
+                    </div>
+                    <div className="stat-card">
+                      <span className="stat-sticker sticker-orange"><Package size={13} /></span>
+                      <div className="stat-info">
+                        <span className="stat-value font-mono">10,000+</span>
+                        <span className="stat-label font-wide">Products</span>
+                      </div>
+                    </div>
+                    <div className="stat-card">
+                      <span className="stat-sticker sticker-green"><CheckCircle size={13} /></span>
+                      <div className="stat-info">
+                        <span className="stat-value font-handwritten">Verified</span>
+                        <span className="stat-label font-light">Sellers</span>
+                      </div>
+                    </div>
+                    <div className="stat-card">
+                      <span className="stat-sticker sticker-blue"><MapPin size={13} /></span>
+                      <div className="stat-info">
+                        <span className="stat-value font-bold">India</span>
+                        <span className="stat-label font-light">Wide Presence</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="hero-banner-right">
+                  <img src={marketplaceHero} alt="Marketplace Hero" className="hero-illustration" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <main className="products-catalog-container">
+            <div className="catalog-header">
+              <p>Showing {filteredProducts.length} of {allProducts.length} active listings</p>
+            </div>
+
+          <div id="products-directory-section" className="catalog-filters-bar">
           <div className="search-wrapper-products">
             <Search className="search-icon-products" size={18} />
             <input 
@@ -211,7 +287,8 @@ export default function PublicProductsPage() {
           </div>
         )}
       </main>
-    )}
+    </>
+  )}
 
       {/* Footer */}
       <footer className="products-footer">

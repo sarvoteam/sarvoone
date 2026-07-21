@@ -93,7 +93,7 @@ export default function ERPLayout() {
   const handleLogout = () => {
     sessionStorage.removeItem('sarvo_token');
     sessionStorage.removeItem('sarvo_user');
-    navigate('/auth/login');
+    navigate('/');
   };
 
   return (

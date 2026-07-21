@@ -1,7 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800;900&display=swap');
+
 /* Premium SaaS Landing Page Styling */
 
 :root {
-  --primary-gradient: linear-gradient(135deg, #a855f7 0%, #7c3aed 60%, #6b21a8 100%);
+  --primary-gradient: linear-gradient(135deg, #8A2BE2 0%, #6A11CB 50%, #4B0082 100%);
   --text-primary: #1f2937;
   --text-secondary: #4b5563;
   --text-muted: #9ca3af;
@@ -25,11 +27,11 @@
   left: 0;
   right: 0;
   height: 72px;
-  background: linear-gradient(135deg, rgba(217, 70, 239, 0.95) 0%, rgba(168, 85, 247, 0.95) 50%, rgba(107, 33, 168, 0.95) 100%);
+  background: linear-gradient(135deg, rgba(138, 43, 226, 0.96) 0%, rgba(106, 17, 203, 0.96) 50%, rgba(75, 0, 130, 0.96) 100%);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 25px rgba(109, 40, 217, 0.25);
+  box-shadow: 0 4px 25px rgba(106, 17, 203, 0.25);
   z-index: 1000;
   display: flex;
   align-items: center;
@@ -74,9 +76,15 @@
 }
 
 .brand-text {
-  font-size: 20px;
-  font-weight: 800;
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 25px;
+  font-weight: 900;
   color: #ffffff;
+  letter-spacing: -1px;
+  background: linear-gradient(135deg, #ffffff 0%, #f3e8ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 2px 10px rgba(106, 17, 203, 0.25);
 }
 
 .nav-links {
